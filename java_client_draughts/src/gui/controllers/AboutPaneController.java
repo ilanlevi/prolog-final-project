@@ -1,10 +1,10 @@
 package gui.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
 public class AboutPaneController {

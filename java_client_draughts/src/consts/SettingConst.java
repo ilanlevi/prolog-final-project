@@ -2,7 +2,7 @@ package consts;
 
 /**
  * This class holds the game setting values as const.
- *  Each setting has the following values: max, min and default
+ * Each setting has the following values: max, min and default
  */
 public class SettingConst {
 
@@ -19,4 +19,9 @@ public class SettingConst {
     public static final int MIN_DIMENSIONS = 6;
     public static final int MAX_DIMENSIONS = 12;
     public static final int DEFAULT_DIMENSIONS = 8;
+
+    /**
+     * how many pawn lines for each player const
+     */
+    public static final int MIN_PAWS_LINES = 1;
 }

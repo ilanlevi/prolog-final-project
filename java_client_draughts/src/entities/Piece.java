@@ -17,7 +17,7 @@ public class Piece {
         return queen;
     }
 
-    public Piece setAsQueen(){
+    public Piece setAsQueen() {
         // change can be only once a piece is a queen - and cannot go back
         queen = true;
         return this;

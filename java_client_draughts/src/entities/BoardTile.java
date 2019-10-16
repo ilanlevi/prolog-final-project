@@ -3,7 +3,7 @@ package entities;
 public class BoardTile {
 
     private Color tileColor;
-    private Piece piece;
+    private Piece piece = null;
 
     public BoardTile(Color tileColor) {
         this.tileColor = tileColor;
@@ -19,17 +19,18 @@ public class BoardTile {
 
     /**
      * Set piece only if the tile color isn't white
-     * @param piece
-     * @return
+     *
+     * @param piece piece to set
+     * @return this
      */
     public BoardTile setPiece(Piece piece) {
-        if(this.tileColor != Color.WHITE) {
+        if (this.tileColor != Color.WHITE) {
             this.piece = piece;
         }
         return this;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return this.piece == null;
     }
 }

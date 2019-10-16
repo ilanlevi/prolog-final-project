@@ -6,11 +6,11 @@ public enum Color {
 
     private String name;
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    Color(String name){
+    Color(String name) {
         this.name = name;
     }
 }
