@@ -1,30 +1,31 @@
 package entities;
 
+import tools.BoardTools;
+
 public class GameState {
 
-    private GameSettings settings;
     private BoardTile[][] tiles;
     private Color playerToPlay;
     private boolean isDone;
+    private int moveNumber;
 
-    public GameState(GameSettings gameSettings) {
-        this.settings = gameSettings;
-        this.tiles = tools.BoardTools.generateNewBoard(gameSettings);
-        playerToPlay = Color.WHITE;
-        isDone = false;
+    public GameState(int moveNumber, Color playerToPlay, BoardTile[][] tiles) {
+        this.playerToPlay = playerToPlay;
+        this.tiles = tiles;
+        this.moveNumber = moveNumber;
+        isDone = BoardTools.isDone(this);
     }
 
-    public GameSettings getSettings() {
-        return settings;
+    public GameState(Game game){
+        this(0, Color.WHITE,  tools.BoardTools.generateNewBoard(Game.getInstance().getSettings()));
     }
-
 
     public BoardTile[][] getTiles() {
         return tiles;
     }
 
     public BoardTile getTile(int i, int j) {
-        if (i > 0 && j > 0 && i < settings.getBoardSize() && j < settings.getBoardSize()) {
+        if (i > 0 && j > 0 && i < Game.getInstance().getSettings().getBoardSize() && j < Game.getInstance().getSettings().getBoardSize()) {
             return tiles[i][j];
         }
         return null;
