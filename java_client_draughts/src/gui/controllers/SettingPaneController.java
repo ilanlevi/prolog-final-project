@@ -9,9 +9,10 @@ package gui.controllers;
 import consts.ErrorMessageConst;
 import entities.Game;
 import entities.GameSettings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -43,15 +44,9 @@ public class SettingPaneController extends Pane {
     @FXML // fx:id="SetButton"
     private Button SetButton; // Value injected by FXMLLoader
 
-    private GameSettings settings;
+    private GameSettings settings = new GameSettings();
 
-    @FXML
-    private void handleSetButton(ActionEvent event) {
-        handleSet();
-        event.consume();
-    }
-
-    private void handleSet() {
+    @FXML private void handleSet() {
         ErrorMsgText.setText(ErrorMessageConst.EMPTY_MESSAGE);
 
         if (!validateTextIsNumber(LevelText.getText()) ||
@@ -61,7 +56,7 @@ public class SettingPaneController extends Pane {
             return;
         }
 
-        settings = new GameSettings();
+
         int level = Integer.parseInt(LevelText.getText());
         int boardSize = Integer.parseInt(BoardSizeText.getText());
         int linesOfPawns = Integer.parseInt(PawnsLinesText.getText());
@@ -87,7 +82,13 @@ public class SettingPaneController extends Pane {
         } else {
             settings.setStartingLinesPawns(linesOfPawns);
         }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "New settings means that the game will restart", ButtonType.YES, ButtonType.NO);
+        alert.setHeaderText("Are you sure?");
+        alert.showAndWait();
 
+        if (alert.getResult().equals(ButtonType.YES)) {
+            Game.instance().resetGame(settings);
+        }
         System.out.println(settings);
     }
 
@@ -107,9 +108,9 @@ public class SettingPaneController extends Pane {
 
 
         // Initialize your logic here: all @FXML variables will have been injected
-        LevelText.setText(Game.getInstance().getSettings().getLevel() + "");
-        BoardSizeText.setText(Game.getInstance().getSettings().getBoardSize() + "");
-        PawnsLinesText.setText(Game.getInstance().getSettings().getStartingLinesPawns() + "");
+        LevelText.setText(Game.instance().getSettings().getLevel() + "");
+        BoardSizeText.setText(Game.instance().getSettings().getBoardSize() + "");
+        PawnsLinesText.setText(Game.instance().getSettings().getStartingLinesPawns() + "");
     }
 
 }

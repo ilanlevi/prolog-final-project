@@ -29,7 +29,7 @@ public class MainFrameController  {
     @FXML
     private void handleAbout(ActionEvent event){
         try {
-            mainPane.getChildren().set(0, FXMLLoader.load(getClass().getResource("../fxml/AboutPane.fxml")));
+            mainPane.getChildren().set(0, FXMLLoader.load(getClass().getResource("/gui/fxml/AboutPane.fxml")));
         }catch (Exception e){
             System.err.println("About window load error!\n" + e.getMessage());
         }
@@ -38,7 +38,7 @@ public class MainFrameController  {
     @FXML
     private void handleSettings(ActionEvent event) {
         try {
-            mainPane.getChildren().set(0, FXMLLoader.load(getClass().getResource("../fxml/SettingPane.fxml")));
+            mainPane.getChildren().set(0, FXMLLoader.load(getClass().getResource("/gui/fxml/SettingPane.fxml")));
         } catch (Exception e) {
             System.err.println("Settings window load error!\n" + e.getMessage());
         }

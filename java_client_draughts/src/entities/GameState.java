@@ -17,7 +17,7 @@ public class GameState {
     }
 
     public GameState(Game game){
-        this(0, Color.WHITE,  tools.BoardTools.generateNewBoard(Game.getInstance().getSettings()));
+        this(0, Color.WHITE,  tools.BoardTools.generateNewBoard(Game.instance().getSettings()));
     }
 
     public BoardTile[][] getTiles() {
@@ -25,7 +25,7 @@ public class GameState {
     }
 
     public BoardTile getTile(int i, int j) {
-        if (i > 0 && j > 0 && i < Game.getInstance().getSettings().getBoardSize() && j < Game.getInstance().getSettings().getBoardSize()) {
+        if (i > 0 && j > 0 && i < Game.instance().getSettings().getBoardSize() && j < Game.instance().getSettings().getBoardSize()) {
             return tiles[i][j];
         }
         return null;

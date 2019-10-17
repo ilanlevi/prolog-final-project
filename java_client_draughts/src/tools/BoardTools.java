@@ -74,7 +74,7 @@ public class BoardTools {
         int blackPawns = 0;
         int whitePawns = 0;
 
-        int length = Game.getInstance().getSettings().getBoardSize();
+        int length = Game.instance().getSettings().getBoardSize();
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < length; j++) {
 
