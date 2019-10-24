@@ -4,7 +4,7 @@
  * You can copy and paste this code into your favorite IDE
  **/
 
-package gui.controllers;
+package gui;
 
 import consts.ErrorMessageConst;
 import entities.Game;
@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
@@ -44,7 +45,12 @@ public class SettingPaneController extends Pane {
     @FXML // fx:id="SetButton"
     private Button SetButton; // Value injected by FXMLLoader
 
+    @FXML
+    private GridPane GridPane;
+
     private GameSettings settings = new GameSettings();
+
+
 
     @FXML private void handleSet() {
         ErrorMsgText.setText(ErrorMessageConst.EMPTY_MESSAGE);
@@ -87,7 +93,8 @@ public class SettingPaneController extends Pane {
         alert.showAndWait();
 
         if (alert.getResult().equals(ButtonType.YES)) {
-            Game.instance().resetGame(settings);
+            Game.instance().setSettings(settings);
+            Game.instance().resetGame();
         }
         System.out.println(settings);
     }

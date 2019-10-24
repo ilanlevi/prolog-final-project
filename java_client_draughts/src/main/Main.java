@@ -1,13 +1,18 @@
+package main;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class Main extends Application {
 
+    public static Scene scene;
+    public static Pane MainPane;
 //    private ArrayList
 
     public static void main(String[] args) {
@@ -16,10 +21,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("gui/fxml/MainPane.fxml"));
-
+        Parent root = FXMLLoader.load(getClass().getResource("../gui/fxml/MainPane.fxml"));
         stage.setTitle("Draughts");
-        stage.setScene(new Scene(root, 300, 275));
+        scene = new Scene(root, 900, 750);
+        stage.setScene(scene);
         stage.show();
     }
 }

@@ -7,10 +7,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.MainFrameController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.MainFrameController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
+        <Menu mnemonicParsing="false" text="Game">
+          <items>
+            <!--            todo-->
+            <MenuItem mnemonicParsing="false" onAction="#handleUndo" text="Undo" />
+            <MenuItem mnemonicParsing="false" onAction="#createNewGame" text="Restart" />
+            <MenuItem mnemonicParsing="false" onAction="#createNewGame" text="New game" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Quit" />
+          </items>
+        </Menu>
         <Menu mnemonicParsing="false" text="Settings">
           <items>
             <MenuItem mnemonicParsing="false" text="Undo move" />

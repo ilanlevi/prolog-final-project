@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui;
 
 /**
  * Sample Skeleton for "AboutPane.fxml" Controller Class

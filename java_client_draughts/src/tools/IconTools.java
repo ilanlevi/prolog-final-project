@@ -12,11 +12,10 @@ public class IconTools {
      * @param piece the piece
      * @return icon path as string
      */
-    public String getIconForPiece(Piece piece) {
+    public static String getIconForPiece(Piece piece) {
         if (piece == null) {
             return "";
         }
-
         String isQueenIcon = piece.isQueen() ? "Q" : "";
         return IconsConst.ICON_PREFIX + piece.getColor().getName() + isQueenIcon + IconsConst.ICON_SUFFIX;
     }

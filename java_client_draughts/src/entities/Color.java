@@ -10,6 +10,12 @@ public enum Color {
         return name;
     }
 
+    public static Color other(Color color) {
+        if (color == BLACK)
+            return WHITE;
+        return BLACK;
+    }
+
     Color(String name) {
         this.name = name;
     }
