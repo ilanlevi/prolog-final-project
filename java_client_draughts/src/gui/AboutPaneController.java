@@ -36,6 +36,8 @@ public class AboutPaneController extends Pane {
         assert AboutProjectPane != null : "fx:id=\"AboutProjectPane\" was not injected: check your FXML file 'AboutPane.fxml'.";
         // Initialize your logic here: all @FXML variables will have been injected
 
+        // TODO: 31/10/2019 add comments about game rules and assumptions
+
     }
 
 }
