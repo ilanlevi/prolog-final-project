@@ -17,7 +17,7 @@ public class GameSettings {
     public GameSettings() {
         level = SettingConst.DEFAULT_LEVEL;
         boardSize = SettingConst.DEFAULT_DIMENSIONS;
-        startingLinesPawns = SettingConst.MIN_PAWS_LINES;
+        startingLinesPawns = 1;
     }
 
 

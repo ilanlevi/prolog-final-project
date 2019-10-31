@@ -4,7 +4,6 @@ import entities.Game;
 import gui.entities.BoardGui;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import main.Main;
 
 import java.net.URL;

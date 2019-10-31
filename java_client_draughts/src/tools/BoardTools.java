@@ -5,7 +5,7 @@ import entities.*;
 public class BoardTools {
 
     /**
-     * Generate a new board for the given settings. Uses {@link BoardTools#generateNewTile(int, Integer, Integer)}
+     * Generate a new board for the given settings.
      *
      * @param gameSettings not null game settings
      * @return a new game board
@@ -15,8 +15,8 @@ public class BoardTools {
         BoardTile[][] boardTiles = new BoardTile[gameSettings.getBoardSize()][gameSettings.getBoardSize()];
 
 //        int emptyTiles = gameSettings.getBoardSize() - gameSettings.getStartingLinesPawns() * 2; // get number of empty tiles
-        int whitePlayerTiles = ((gameSettings.getBoardSize() -  gameSettings.getStartingLinesPawns())  / 2 ) * gameSettings.getBoardSize() / 2; // get number of empty tiles
-        int emptyTiles = getInitializeTilesNumberForBoard(gameSettings); // get number of whitePlayerTiles
+        int whitePlayerTiles = getInitializeTilesNumberForBoard(gameSettings); // get number of empty tiles
+        int emptyTiles = (gameSettings.getBoardSize() - gameSettings.getStartingLinesPawns() * 2) * gameSettings.getBoardSize() / 2; // get number of whitePlayerTiles
 
         for (int i = 0; i < gameSettings.getBoardSize(); i++) {
             for (int j = 0; j < gameSettings.getBoardSize(); j++) {
@@ -25,22 +25,20 @@ public class BoardTools {
                     tile = new BoardTile(Color.WHITE);
                 }
                 // black tile
-                else{
+                else {
                     if (whitePlayerTiles > 0) {
                         --whitePlayerTiles;
                         tile = new BoardTile(Color.BLACK).setPiece(new Piece(Color.WHITE)); // set a white pawn
-                    }
-                    else{
+                    } else {
                         if (emptyTiles > 0) {
                             --emptyTiles; // no pawn
-                            tile =  new BoardTile(Color.BLACK); // set an empty tile
-                        }
-                        else {
+                            tile = new BoardTile(Color.BLACK); // set an empty tile
+                        } else {
                             tile = new BoardTile(Color.BLACK).setPiece(new Piece(Color.BLACK)); // set a black pawnate suitable tile
                         }
                     }
                 }
-                boardTiles[i][j] =tile;
+                boardTiles[i][j] = tile;
             }
 
         }
@@ -56,9 +54,9 @@ public class BoardTools {
      * @see GameSettings
      */
     public static int getInitializeTilesNumberForBoard(GameSettings gameSettings) {
-        return gameSettings.getStartingLinesPawns() * gameSettings.getBoardSize();
+        return gameSettings.getStartingLinesPawns() * gameSettings.getBoardSize() / 2;
     }
-    
+
     /**
      * Create suitable tile: White or black.
      *      The black tile may be empty or below a black/white pawn, depending on params value.
@@ -75,6 +73,7 @@ public class BoardTools {
 
     /**
      * Return if the game is done. (one of the player has not pawns on the board)
+     *
      * @param state the game state to check
      * @return true if done, false otherwise
      */

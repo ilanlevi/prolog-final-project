@@ -1,12 +1,10 @@
 package gui.entities;
 
-import entities.*;
-import javafx.beans.binding.DoubleBinding;
-import javafx.scene.image.Image;
+import entities.BoardTile;
+import entities.Color;
+import entities.Game;
+import entities.Piece;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.shape.Rectangle;
-import tools.IconTools;
 
 
 /**
@@ -20,18 +18,19 @@ import tools.IconTools;
 public class BoardGui extends TrueGridPane {
 
     private Color playerToPlay;
-    private int boardSize;
-    private DoubleBinding radiusBinding;
 
-    private int Clicked1i = -1, Clicked1j = -1;
-    private int Clicked2i = -1, Clicked2j = -1;
+    private int boardSize;
+
+    private BoardTileGui[][] boardMatrix;
+    private BoardTileGui clicked;
 
     public BoardGui(int boardSize) {
         super(boardSize, boardSize);
         this.boardSize = boardSize;
         playerToPlay = Color.WHITE;
+        boardMatrix = new BoardTileGui[boardSize][boardSize];
         setTiles();
-//        setBoard();
+        setBoard();
     }
 
 
@@ -39,55 +38,28 @@ public class BoardGui extends TrueGridPane {
      * Sets the board with Checkers in accordance with the standard format of play
      */
     public void setBoard() {
+        getChildren().removeIf(x -> x instanceof ImageView);
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 Piece piece = Game.instance().getLatestGameState().getTile(i, j).getPiece();
-                setIcon(piece, i, j);
+                boardMatrix[i][j].setIcon(piece);
+                ImageView imageView = boardMatrix[i][j].getImage();
+                if (imageView != null) {
+                    imageView.fitWidthProperty().bind(cellWidthProperty());
+                    imageView.fitHeightProperty().bind(cellHeightProperty());
+                    int finalI = i;
+                    int finalJ = j;
+                    imageView.setOnMouseClicked(event -> {
+                        onMouseClicked(boardMatrix[finalI][finalJ]);
+                        setBoard();
+                    });
+                    add(imageView, j, i);
+                    imageView.toFront();
+                }
             }
         }
     }
 
-    private void setIcon(Piece piece, int i, int j) {
-        getChildren()
-                .removeIf(node -> (getRowIndex(node) == i) && (getColumnIndex(node) == j) && (node instanceof ImageView));
-        if (piece == null)
-            return;
-        Image image = null;
-        try {
-            image = new Image(IconTools.getIconForPiece(piece));
-            ImageView imageView = new ImageView(image);
-            imageView.fitWidthProperty().bind(cellWidthProperty());
-            imageView.fitHeightProperty().bind(cellHeightProperty());
-            add(imageView, j, i);
-            imageView.toFront();
-        } catch (Exception e) {
-            System.err.println("Error while creating image!\n" + e.getMessage());
-            return;
-        }
-//
-//        image.toFront();
-//        image.setOnMouseClicked(event -> getChildren().forEach(x -> {
-//                    if ((getRowIndex(x) == i) && (getColumnIndex(x) == j) && (x instanceof ImageView))
-//                        x.setBlendMode(BlendMode.BLUE);
-//                }
-//        ));
-//        image.toFront();
-//        image.toBack();
-    }
-
-
-//        for (Checker checker : (List<Checker>) ((List) getChildren().filtered((x) -> x.getClass() == Checker.class))) {
-//            setHalignment(checker, HPos.CENTER);
-//            setValignment(checker, VPos.CENTER);
-//            radiusBinding = (DoubleBinding) new When(cellWidthProperty().lessThan(cellHeightProperty()))
-//                    .then(cellWidthProperty().multiply(.5 * .8))
-//                    .otherwise(cellHeightProperty().multiply(.5 * .8)
-//                    );
-//            //bind the radius of the checker to .8 * width of it's container
-//            checker.radiusProperty().bind(radiusBinding);
-//        }
-//
-//    }
 
     /**
      * Sets the board with tiles of alternating Color as is standard
@@ -95,75 +67,91 @@ public class BoardGui extends TrueGridPane {
     private void setTiles() {
         for (int j = 0; j < boardSize; j++) {
             for (int i = 0; i < boardSize; i++) {
-                Rectangle tmp = new Rectangle();
-                tmp.widthProperty().bind(cellWidthProperty());
-                tmp.heightProperty().bind(cellHeightProperty());
-                if ((i + j) % 2 == 0) {
-                    tmp.setFill(javafx.scene.paint.Color.MOCCASIN);
-                } else {
-                    tmp.setFill(javafx.scene.paint.Color.MAROON);
-                }
+                BoardTileGui tileGui = new BoardTileGui(i, j);
+                tileGui.getRectangle().widthProperty().bind(cellWidthProperty());
+                tileGui.getRectangle().heightProperty().bind(cellHeightProperty());
 
-                add(tmp, j, i);
-                int finalI = i;
-                int finalJ = j;
-                tmp.setOnMouseClicked(event -> {
-                    onMouseClicked(tmp, finalI, finalJ);
+                add(tileGui.getRectangle(), j, i);
+
+                tileGui.getRectangle().setOnMouseClicked(event -> {
+                    onMouseClicked(tileGui);
                     setBoard();
                 });
-                tmp.toBack();
+                boardMatrix[i][j] = tileGui;
             }
         }
     }
 
+    public void onMouseClicked(BoardTileGui boardTileGui) {
+        BoardTile t = Game.instance().getLatestGameState().getTile(boardTileGui.getRow(), boardTileGui.getColumn());
 
-    public static javafx.scene.paint.Color rectangleColor(int i, int j) {
-        if ((i + j) % 2 == 0)
-            return javafx.scene.paint.Color.MOCCASIN;
-        return javafx.scene.paint.Color.MAROON;
-    }
-
-    public void onMouseClicked(Rectangle rectangle, int i, int j) {
-        BoardTile tile = Game.instance().getLatestGameState().getTile(i, j);
-
-        if (Clicked1i == -1 && Clicked1j == -1) { // first move
-            if(!tile.isEmpty() && tile.getPiece().getColor().equals(Game.instance().getLatestGameState().getPlayerToPlay())){
-                Clicked1i = i;
-                Clicked1j = j;
-                rectangle.setFill(javafx.scene.paint.Color.GREEN);
-            }
+        if (t == null || t.getTileColor().equals(Color.WHITE)) { // clicked on white, return
+            System.out.println("blabla2");
             return;
         }
 
-        // second move
-        if (!tile.isEmpty()) {
-            // not empty - reset values
-                getChildren().filtered(n -> n instanceof Rectangle).forEach(x -> {
-                    int row = getRowIndex(x);
-                    int col = getColumnIndex(x);
-                    ((Rectangle) x).setFill(rectangleColor(row, col));
-                });
-                Clicked1i = -1;
-                Clicked1j = -1;
-        } else { // clicked on empty tile
-            GameState newGameState = new GameState(Game.instance().getLatestGameState());
-            BoardTile oldTile = newGameState.getTile(Clicked1i, Clicked1j);
-            Piece newPiece = oldTile.getPiece();
-            Piece.markQueenIfNeeded(newPiece, i);
-            oldTile.setPiece(null);
-            newGameState.getTile(i, j).setPiece(newPiece);
-            // todo: check if ate other player + add multi eating
-            Game.instance().addNewState(newGameState);
+
+        if (clicked == null) {
+            if (!t.isEmpty() && t.getPiece().getColor().equals(Game.instance().getLatestGameState().getPlayerToPlay())) {
+                clicked = boardTileGui;
+                clicked.getRectangle().setFill(javafx.scene.paint.Color.GREEN);
+            }
+            return;
         }
+        // else - a piece was picked already
+        if(t.isEmpty() && )
+
+//        clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
     }
 
-        public Color getPlayerToPlay () {
-            return playerToPlay;
-        }
 
-        public BoardGui setPlayerToPlay (Color playerToPlay){
-            this.playerToPlay = playerToPlay;
-            return this;
-        }
+//    public void onMouseClicked(Rectangle rectangle, int i, int j) {
+//        BoardTile tile = Game.instance().getLatestGameState().getTile(i, j);
+//
+//        if (clicked1i == -1 && clicked1j == -1) { // first move
+//            if (!tile.isEmpty()
+//                    && tile.getPiece().getColor().equals(Game.instance().getLatestGameState().getPlayerToPlay())) {
+//                clicked1i = i;
+//                clicked1j = j;
+//                rectangle.setFill(javafx.scene.paint.Color.GREEN);
+//            }
+//            return;
+//        }
+//
+//        // second move
+//        if (!tile.isEmpty() && tile.getTileColor().equals(Color.WHITE)) {
+//            // not empty - reset values
+//            getChildren().filtered(n -> n instanceof Rectangle).forEach(x -> {
+//                int row = getRowIndex(x);
+//                int col = getColumnIndex(x);
+//                ((Rectangle) x).setFill(rectangleColor(row, col));
+//            });
+//            clicked1i
+//                    = -1;
+//            clicked1j = -1;
+//        } else { // clicked on empty tile
+//            GameState newGameState = new GameState(Game.instance().getLatestGameState());
+//            BoardTile oldTile = newGameState.getTile(clicked1i, clicked1j);
+//            getChildren().
+//                    filtered(n -> n instanceof Rectangle && getColumnIndex(n) == clicked1j && getRowIndex(n) == clicked1i)
+//                    .forEach(x -> ((Rectangle) x).setFill(rectangleColor(clicked1i, clicked1j)));
+//            Piece newPiece = oldTile.getPiece();
+//            Piece.markQueenIfNeeded(newPiece, i);
+//            oldTile.setPiece(null);
+//            newGameState.getTile(i, j).setPiece(newPiece);
+//            // todo: check if ate other player + add multi eating
+//            Game.instance().addNewState(newGameState);
+//        }
+//    }
+
+    public Color getPlayerToPlay() {
+        return playerToPlay;
     }
 
+    public BoardGui setPlayerToPlay(Color playerToPlay) {
+        this.playerToPlay = playerToPlay;
+        return this;
+    }
+}
+
+;

@@ -32,6 +32,25 @@ public class GameState {
         return null;
     }
 
+    public Piece removePiece(int i, int j) {
+        BoardTile t = getTile(i, j);
+        if (t == null || t.isEmpty())
+            return null;
+        Piece piece = t.getPiece();
+        t.setPiece(null);
+        return piece;
+    }
+
+    public boolean movePiece(int iFrom, int jFrom, int iTo, int jTo) {
+        BoardTile from = getTile(iFrom, jFrom);
+        BoardTile to = getTile(iTo, jTo);
+        if (from == null || to == null || from.isEmpty() || !to.isEmpty())
+            return false;
+        Piece p = removePiece(iFrom, jFrom);
+        to.setPiece(p);
+        return true;
+    }
+
     public Color getPlayerToPlay() {
         return playerToPlay;
     }

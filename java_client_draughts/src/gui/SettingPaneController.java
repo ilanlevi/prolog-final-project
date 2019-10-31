@@ -51,8 +51,8 @@ public class SettingPaneController extends Pane {
     private GameSettings settings = new GameSettings();
 
 
-
-    @FXML private void handleSet() {
+    @FXML
+    private void handleSet() {
         ErrorMsgText.setText(ErrorMessageConst.EMPTY_MESSAGE);
 
         if (!validateTextIsNumber(LevelText.getText()) ||
@@ -83,11 +83,12 @@ public class SettingPaneController extends Pane {
         }
 
         if (!settings.isStartingLinesPawnsValid(linesOfPawns)) {
-            ErrorMsgText.setText(ErrorMessageConst.LEVEL_ERROR_MESSAGE);
+            ErrorMsgText.setText(ErrorMessageConst.PAWN_LINES_ERROR_MESSAGE);
             return;
         } else {
             settings.setStartingLinesPawns(linesOfPawns);
         }
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "New settings means that the game will restart", ButtonType.YES, ButtonType.NO);
         alert.setHeaderText("Are you sure?");
         alert.showAndWait();

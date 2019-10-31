@@ -21,7 +21,7 @@ public class SettingConst {
     public static final int DEFAULT_DIMENSIONS = 8;
 
     /**
-     * how many pawn lines for each player const
+     * how many pawn lines of pawns for each player const
      */
     public static final int MIN_PAWS_LINES = 1;
 }
