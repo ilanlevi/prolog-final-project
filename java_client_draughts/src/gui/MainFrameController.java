@@ -4,11 +4,14 @@ package gui;
  * You can copy and paste this code into your favorite IDE
  **/
 
+import consts.AboutPageConst;
 import entities.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import main.Main;
 
 import java.net.URL;
@@ -32,7 +35,14 @@ public class MainFrameController {
     private void handleAbout(ActionEvent event) {
         try {
             mainPane.getChildren().clear();
-            mainPane.getChildren().add(0, FXMLLoader.load(getClass().getResource("/gui/fxml/AboutPane.fxml")));
+            mainPane.getStyleClass().add("browser");
+            WebView webView = new WebView();
+
+            webView.resize(mainPane.getWidth(), mainPane.getHeight());
+            WebEngine webEngine = webView.getEngine();
+            webEngine.load(URL.class.getResource(AboutPageConst.HTML_ROUTE).toExternalForm());
+            webView.applyCss();
+            mainPane.getChildren().add(0, webView);
         } catch (Exception e) {
             System.err.println("About window load error!\n" + e.getMessage());
         }

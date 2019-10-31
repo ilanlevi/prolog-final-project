@@ -99,7 +99,7 @@ public class BoardGui extends TrueGridPane {
             return;
         }
         // else - a piece was picked already
-        if(t.isEmpty() && )
+//        if(t.isEmpty() && )
 
 //        clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
     }

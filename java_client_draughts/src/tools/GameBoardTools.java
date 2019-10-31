@@ -14,11 +14,13 @@ public class GameBoardTools {
             gameState.changePlayerToPlay();
             return gameState.movePiece(i, j, newI, newJ) ? gameState : null;
         }
-        if (Math.abs(i - newI) == 2 && Math.abs(j - newJ) == 2) { // normal move, didn't eat
-            if (canEat(gameState, i, j, newI, newJ)) {
-                return null;
-            }
-        }
+
+        return null;
+//        if (Math.abs(i - newI) == 2 && Math.abs(j - newJ) == 2) { // normal move, didn't eat
+//            if (canEat(gameState, i, j, newI, newJ)) {
+//                return null;
+//            }
+//        }
 
     }
 
@@ -46,6 +48,7 @@ public class GameBoardTools {
         if (Math.abs(i - newI) != 2 || Math.abs(j - newJ) != 2) { // index for eating
             return false;
         }
-        boolean movesUp = i - newI;
+//        boolean movesUp = i - newI;
+        return true;
     }
 }
