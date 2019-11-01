@@ -4,6 +4,7 @@ import entities.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
+import main.Main;
 import tools.BoardTools;
 import tools.GameBoardTools;
 
@@ -21,14 +22,14 @@ public class BoardGui extends TrueGridPane {
     public BoardGui(int boardSize) {
         super(boardSize, boardSize);
         this.boardSize = boardSize;
-        playerToPlay = Color.WHITE;
         boardMatrix = new BoardTileGui[boardSize][boardSize];
+        setPlayerToPlay(Color.WHITE);
         setTiles();
         setBoard();
     }
 
     public void refresh() {
-        playerToPlay = Game.instance().getLatestGameState().getPlayerToPlay();
+        setPlayerToPlay(Game.instance().getLatestGameState().getPlayerToPlay());
         setBoard();
     }
 
@@ -145,6 +146,7 @@ public class BoardGui extends TrueGridPane {
 
     public BoardGui setPlayerToPlay(Color playerToPlay) {
         this.playerToPlay = playerToPlay;
+        Main.playerTurn.setFill(playerToPlay.equals(Color.WHITE) ? javafx.scene.paint.Color.WHITE : javafx.scene.paint.Color.BLACK);
         return this;
     }
 }

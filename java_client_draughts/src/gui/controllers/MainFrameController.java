@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.Main;
@@ -27,6 +28,9 @@ public class MainFrameController {
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+    @FXML
+    private Rectangle playerTurn;
 
     @FXML // fx:id="mainPane"
     private Pane mainPane; // Value injected by FXMLLoader
@@ -68,7 +72,10 @@ public class MainFrameController {
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert mainPane != null : "fx:id=\"mainPane\" was not injected: check your FXML file 'MainPane.fxml'.";
+        assert playerTurn != null : "fx:id=\"playerTurn\" was not injected: check your FXML file 'MainPane.fxml'.";
+        Main.playerTurn = playerTurn;
         Main.MainPane = mainPane;
+        playerTurn.widthProperty().bind(mainPane.widthProperty());
         createNewGame(new ActionEvent());
     }
 
