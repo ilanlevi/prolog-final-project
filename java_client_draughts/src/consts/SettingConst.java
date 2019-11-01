@@ -5,7 +5,7 @@ package consts;
  * Each setting has the following values: max, min and default
  */
 public class SettingConst {
-
+// TODO: 01/11/2019 change const -> and write in info
     /**
      * Level const
      */
