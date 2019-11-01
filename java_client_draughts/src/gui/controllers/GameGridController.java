@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 import entities.Game;
 import gui.entities.BoardGui;

@@ -1,20 +1,10 @@
 package gui.entities;
 
-import entities.BoardTile;
-import entities.Color;
-import entities.Game;
-import entities.Piece;
+import entities.*;
 import javafx.scene.image.ImageView;
+import tools.GameBoardTools;
 
 
-/**
- * A robust implementation of a GridPane containing cells of uniform dimensions
- * That is to say at every cell (i,j) the dimensions are x, y
- * This implementation has the advtange of:
- * Automatically initialzing the grid from the constructor
- * Automatic binding to the containing Scene for easy resizing
- * The ability to quickly add and remove nodes using the grid's coordinates as a parameter
- */
 public class BoardGui extends TrueGridPane {
 
     private Color playerToPlay;
@@ -30,6 +20,11 @@ public class BoardGui extends TrueGridPane {
         playerToPlay = Color.WHITE;
         boardMatrix = new BoardTileGui[boardSize][boardSize];
         setTiles();
+        setBoard();
+    }
+
+    public void refresh() {
+        playerToPlay = Game.instance().getLatestGameState().getPlayerToPlay();
         setBoard();
     }
 
@@ -86,63 +81,37 @@ public class BoardGui extends TrueGridPane {
         BoardTile t = Game.instance().getLatestGameState().getTile(boardTileGui.getRow(), boardTileGui.getColumn());
 
         if (t == null || t.getTileColor().equals(Color.WHITE)) { // clicked on white, return
-            System.out.println("blabla2");
             return;
         }
-
 
         if (clicked == null) {
             if (!t.isEmpty() && t.getPiece().getColor().equals(Game.instance().getLatestGameState().getPlayerToPlay())) {
                 clicked = boardTileGui;
                 clicked.getRectangle().setFill(javafx.scene.paint.Color.GREEN);
+            } else {
+                // reset click
+                clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
+                clicked = null;
             }
             return;
         }
-        // else - a piece was picked already
-//        if(t.isEmpty() && )
 
-//        clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
+        // else - a piece was picked already
+
+        GameState currState = Game.instance().getLatestGameState();
+        GameState newState = GameBoardTools.move(currState, clicked.getRow(), clicked.getColumn(), boardTileGui.getRow(), boardTileGui.getColumn());
+        if (newState != null) {
+            Game.instance().addNewState(newState);
+            refresh();
+        }
+
+
+        clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
+        clicked = null;
+
+
     }
 
-
-//    public void onMouseClicked(Rectangle rectangle, int i, int j) {
-//        BoardTile tile = Game.instance().getLatestGameState().getTile(i, j);
-//
-//        if (clicked1i == -1 && clicked1j == -1) { // first move
-//            if (!tile.isEmpty()
-//                    && tile.getPiece().getColor().equals(Game.instance().getLatestGameState().getPlayerToPlay())) {
-//                clicked1i = i;
-//                clicked1j = j;
-//                rectangle.setFill(javafx.scene.paint.Color.GREEN);
-//            }
-//            return;
-//        }
-//
-//        // second move
-//        if (!tile.isEmpty() && tile.getTileColor().equals(Color.WHITE)) {
-//            // not empty - reset values
-//            getChildren().filtered(n -> n instanceof Rectangle).forEach(x -> {
-//                int row = getRowIndex(x);
-//                int col = getColumnIndex(x);
-//                ((Rectangle) x).setFill(rectangleColor(row, col));
-//            });
-//            clicked1i
-//                    = -1;
-//            clicked1j = -1;
-//        } else { // clicked on empty tile
-//            GameState newGameState = new GameState(Game.instance().getLatestGameState());
-//            BoardTile oldTile = newGameState.getTile(clicked1i, clicked1j);
-//            getChildren().
-//                    filtered(n -> n instanceof Rectangle && getColumnIndex(n) == clicked1j && getRowIndex(n) == clicked1i)
-//                    .forEach(x -> ((Rectangle) x).setFill(rectangleColor(clicked1i, clicked1j)));
-//            Piece newPiece = oldTile.getPiece();
-//            Piece.markQueenIfNeeded(newPiece, i);
-//            oldTile.setPiece(null);
-//            newGameState.getTile(i, j).setPiece(newPiece);
-//            // todo: check if ate other player + add multi eating
-//            Game.instance().addNewState(newGameState);
-//        }
-//    }
 
     public Color getPlayerToPlay() {
         return playerToPlay;

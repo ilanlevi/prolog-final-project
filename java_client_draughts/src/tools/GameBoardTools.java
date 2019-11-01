@@ -1,8 +1,6 @@
 package tools;
 
-import entities.BoardTile;
-import entities.Game;
-import entities.GameState;
+import entities.*;
 
 public class GameBoardTools {
 
@@ -10,18 +8,36 @@ public class GameBoardTools {
         if (!isValidMove(gameStateOld, i, j, newI, newJ))
             return null;
         GameState gameState = new GameState(gameStateOld);
+        Piece piece = gameState.getTile(i, j).getPiece();
         if (Math.abs(i - newI) == 1 && Math.abs(j - newJ) == 1) { // normal move, didn't eat
+            if (piece.isQueen() || i < newI) {
+                // only queen can go back
+                return null;
+            }
             gameState.changePlayerToPlay();
-            return gameState.movePiece(i, j, newI, newJ) ? gameState : null;
+            if(!gameState.movePiece(i, j, newI, newJ))
+                return null;
+            gameState.markNewQueensIfNeeded();
+            return gameState;
+        }
+
+        // eating
+        if (canEat(gameStateOld, i, j, newI, newJ)) {
+            gameState.removePiece((i + newI) / 2, (j + newJ) / 2);
+            gameState.movePiece(i, j, newI, newJ);
+            if(!canEatAnyone(gameState, newI, newJ)) // cannot do strike
+                gameState.changePlayerToPlay();
+            return gameState;
         }
 
         return null;
-//        if (Math.abs(i - newI) == 2 && Math.abs(j - newJ) == 2) { // normal move, didn't eat
-//            if (canEat(gameState, i, j, newI, newJ)) {
-//                return null;
-//            }
-//        }
+    }
 
+    public static boolean isStrikeMove(GameState gameState) {
+        int numberOfMoves = Game.instance().numberOfMoves();
+        if (numberOfMoves == 1)
+            return false;
+        return gameState.getPlayerToPlay().equals(Game.instance().getMove(numberOfMoves - 1).getPlayerToPlay());
     }
 
     public static boolean isValidMove(GameState gameStateOld, int i, int j, int newI, int newJ) {
@@ -37,18 +53,52 @@ public class GameBoardTools {
         if (oldTile.isEmpty() || !newTile.isEmpty() || !oldTile.getPiece().getColor().equals(gameStateOld.getPlayerToPlay()))
             // check if this cell isn't empty + new one is empty + this cell is the same color as player
             return false;
-        if (i > newI && !oldTile.getPiece().isQueen())
-            // only queen can go back
-            return false;
 
         return true;
+    }
+
+    public static Piece getStepOverPiece(GameState gameStateOld, int i, int j, int newI, int newJ){
+        int stepOverPieceI = (i + newI) / 2;
+        int stepOverPieceJ = (j + newJ) / 2;
+        return gameStateOld.getTile(stepOverPieceI, stepOverPieceJ).getPiece(); // get step over piece
     }
 
     public static boolean canEat(GameState gameStateOld, int i, int j, int newI, int newJ) {
+        Piece piece = gameStateOld.getTile(i, j).getPiece();
         if (Math.abs(i - newI) != 2 || Math.abs(j - newJ) != 2) { // index for eating
             return false;
         }
-//        boolean movesUp = i - newI;
+
+        Piece stepOverPiece = getStepOverPiece(gameStateOld, i, j, newI, newJ);
+
+        if (stepOverPiece == null || stepOverPiece.getColor().equals(piece.getColor())) // check color
+            return false;
+
+        boolean gotBack = piece.getColor().equals(Color.WHITE) ? i  < newI : i > newI;
+
+        if (!gotBack && !isStrikeMove(gameStateOld) && !piece.isQueen()) {
+            // first strike - cannot go back
+            return false;
+        }
+
+
+
+        // can go back
+
         return true;
     }
+
+    public static boolean canEatAnyone(GameState gameState, int i, int j) {
+        int boardSize = Game.instance().getSettings().getBoardSize();
+        for (int i1 = -2; i1 <= 2; i1 += 4) {
+            for (int j1 = -2; j1 <= 2; j1 += 4) {
+                if (i + i1 >= 0 && i + i1 < boardSize && j + j1 >= 0 && j + j1 < boardSize && canEat(gameState, i, j, i + i1, j + j1))
+                    return true;
+            }
+        }
+        return false;
+    }
+
 }
+
+

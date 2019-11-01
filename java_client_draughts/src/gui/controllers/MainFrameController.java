@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 /**
  * Sample Skeleton for "MainPane.fxml" Controller Class
  * You can copy and paste this code into your favorite IDE
@@ -38,7 +38,8 @@ public class MainFrameController {
             mainPane.getStyleClass().add("browser");
             WebView webView = new WebView();
 
-            webView.resize(mainPane.getWidth(), mainPane.getHeight());
+            webView.prefWidthProperty().bind(Main.scene.widthProperty());
+            webView.prefHeightProperty().bind(Main.scene.heightProperty());
             WebEngine webEngine = webView.getEngine();
             webEngine.load(URL.class.getResource(AboutPageConst.HTML_ROUTE).toExternalForm());
             webView.applyCss();

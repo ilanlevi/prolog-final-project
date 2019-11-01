@@ -39,6 +39,16 @@ public class Game {
         return gameState.get(0);
     }
 
+    public int numberOfMoves(){
+        return instance.gameState.size();
+    }
+
+    public GameState getMove(int index){
+        if(index < 0 || index >= instance.gameState.size())
+            return null;
+        return instance.gameState.get(index);
+    }
+
     public GameState goBackState() {
         int size = gameState.size();
         if (size > 1)

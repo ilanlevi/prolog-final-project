@@ -51,6 +51,17 @@ public class GameState {
         return true;
     }
 
+    public void markNewQueensIfNeeded(){
+        int boardSize = Game.instance().getSettings().getBoardSize();
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                Piece p = getTile(i, j).getPiece();
+                if(p != null)
+                    Piece.markQueenIfNeeded(p, i);
+            }
+        }
+    }
+
     public Color getPlayerToPlay() {
         return playerToPlay;
     }

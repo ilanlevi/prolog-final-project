@@ -4,7 +4,7 @@
  * You can copy and paste this code into your favorite IDE
  **/
 
-package gui;
+package gui.controllers;
 
 import consts.ErrorMessageConst;
 import entities.Game;
@@ -44,9 +44,6 @@ public class SettingPaneController extends Pane {
 
     @FXML // fx:id="SetButton"
     private Button SetButton; // Value injected by FXMLLoader
-
-    @FXML
-    private GridPane GridPane;
 
     private GameSettings settings = new GameSettings();
 

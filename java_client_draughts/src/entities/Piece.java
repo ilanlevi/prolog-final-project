@@ -27,7 +27,7 @@ public class Piece {
         int boardSize = Game.instance().getSettings().getBoardSize();
         if (piece == null || row < 0 || row > boardSize)
             return piece;
-        if (piece.getColor() == Color.WHITE && row == boardSize)
+        if (piece.getColor() == Color.WHITE && row == boardSize - 1)
             piece.setAsQueen();
         else if (piece.getColor() == Color.BLACK && row == 0)
             piece.setAsQueen();
