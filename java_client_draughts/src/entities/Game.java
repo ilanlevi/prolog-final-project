@@ -1,6 +1,5 @@
 package entities;
 
-import gui.controllers.GameGridController;
 import gui.entities.BoardGui;
 
 import java.util.ArrayList;

@@ -90,7 +90,7 @@ public class BoardGui extends TrueGridPane {
     public void checkIfDone(){
         if(BoardTools.isDone(Game.instance().getLatestGameState())){
             int index = Game.instance().numberOfMoves();
-            Color playerWon = Game.instance().getMove(index - 1).getPlayerToPlay();
+            Color playerWon = Game.instance().getMove(index - 2).getPlayerToPlay();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Game is over!\nPlayer won: " + playerWon.name() + "\nRestart game",
                     ButtonType.OK);
             alert.setHeaderText("Game over");
