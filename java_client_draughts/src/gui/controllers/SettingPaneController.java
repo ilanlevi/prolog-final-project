@@ -14,9 +14,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import main.Main;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +27,9 @@ public class SettingPaneController extends Pane {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
+
+    @FXML // ResourceBundle that was given to the FXMLLoader
+    private VBox MainPane;
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
@@ -110,7 +114,10 @@ public class SettingPaneController extends Pane {
         assert LevelText != null : "fx:id=\"LevelText\" was not injected: check your FXML file 'SettingPane.fxml'.";
         assert PawnsLinesText != null : "fx:id=\"PawnsLinesText\" was not injected: check your FXML file 'SettingPane.fxml'.";
         assert SetButton != null : "fx:id=\"SetButton\" was not injected: check your FXML file 'SettingPane.fxml'.";
+        assert MainPane != null : "fx:id=\"MainPane\" was not injected: check your FXML file 'SettingPane.fxml'.";
 
+        MainPane.prefWidthProperty().bind(Main.scene.widthProperty());
+        MainPane.prefHeightProperty().bind(Main.scene.heightProperty());
 
         // Initialize your logic here: all @FXML variables will have been injected
         LevelText.setText(Game.instance().getSettings().getLevel() + "");
