@@ -40,10 +40,11 @@ public class GameGridController extends AnchorPane {
 //        System.out.println("GameAnchorPane: width = " + GameAnchorPane.getWidth() + " height = " + GameAnchorPane.getHeight());
         grid.cellWidthProperty().bind(Main.MainPane.widthProperty().divide(boardSize));
         grid.cellHeightProperty().bind(Main.MainPane.heightProperty().divide(boardSize));
-        grid.setBoard();
+
         grid.setVisible(true);
         grid.setGridLinesVisible(true);
-
+        grid.bindGame();
+        grid.setBoard();
 
 
     }

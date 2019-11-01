@@ -1,14 +1,28 @@
 package entities;
 
+import gui.controllers.GameGridController;
+import gui.entities.BoardGui;
+
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Game {
     private GameSettings settings;
     private ArrayList<GameState> gameState;
+    private BoardGui boardGui;
 
     private Game() {
         settings = new GameSettings();
         gameState = new ArrayList<>();
+    }
+
+    public BoardGui getBoardGui() {
+        return boardGui;
+    }
+
+    public Game setBoardGui(BoardGui boardGui) {
+        instance.boardGui = boardGui;
+        return this;
     }
 
     private static Game instance = new Game();
@@ -17,26 +31,27 @@ public class Game {
         return instance;
     }
 
-    public Game setSettings(GameSettings settings) {
-        this.settings = settings;
-        return this;
+    public void setSettings(GameSettings settings) {
+        instance.settings = settings;
     }
 
     public GameSettings getSettings() {
         return settings;
     }
 
-    public Game resetGame() {
+    public void resetGame() {
         instance.gameState.clear();
         instance.gameState.add(new GameState(instance));
-        return instance;
+        Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
     }
 
     public GameState getLatestGameState() {
-        int size = gameState.size();
-        if (size == 0)
+        int size = instance.gameState.size();
+        if (size == 0) {
             instance.gameState.add(new GameState(instance));
-        return gameState.get(size - 1);
+            return instance.gameState.get(0);
+        }
+        return instance.gameState.get(size - 1);
     }
 
     public int numberOfMoves(){
@@ -49,16 +64,16 @@ public class Game {
         return instance.gameState.get(index);
     }
 
-    public GameState goBackState() {
-        int size = gameState.size();
-        if (size > 1)
-            instance.gameState.remove(instance.getLatestGameState());
-        return instance.getLatestGameState();
+    public void goBackState() {
+        if (instance.gameState.size() > 0)
+            instance.gameState.remove(instance.gameState.size() - 1);
+        Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
     }
 
     public void addNewState(GameState state) {
         if (state != null)
-            gameState.add(state);
+            instance.gameState.add(state);
+        Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
     }
 
 }

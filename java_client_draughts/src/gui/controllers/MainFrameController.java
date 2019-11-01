@@ -62,26 +62,22 @@ public class MainFrameController {
     @FXML
     private void handleUndo(ActionEvent event) {
         Game.instance().goBackState();
-        createNewGame(event);
     }
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert mainPane != null : "fx:id=\"mainPane\" was not injected: check your FXML file 'MainPane.fxml'.";
-//        mainPane.autosize();
-//        mainPane.getChildren().add(null)
         Main.MainPane = mainPane;
         createNewGame(new ActionEvent());
-        // Initialize your logic here: all @FXML variables will have been injected
     }
 
     public void createNewGame(ActionEvent event) {
         try {
-            // TODO: 18/10/2019 dont create new instances every time
             // TODO: 18/10/2019 Change string to constst
             mainPane.getChildren().clear();
             mainPane.getChildren().add(0, FXMLLoader.load(getClass().getResource("/gui/fxml/GameGrid.fxml")));
+            Game.instance().resetGame();
         } catch (Exception e) {
             System.err.println("Board window load error!\n" + e.getMessage());
         }

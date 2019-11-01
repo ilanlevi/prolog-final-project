@@ -1,7 +1,10 @@
 package gui.entities;
 
 import entities.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
+import tools.BoardTools;
 import tools.GameBoardTools;
 
 
@@ -10,6 +13,7 @@ public class BoardGui extends TrueGridPane {
     private Color playerToPlay;
 
     private int boardSize;
+    private boolean isStrikeMove = false;
 
     private BoardTileGui[][] boardMatrix;
     private BoardTileGui clicked;
@@ -26,6 +30,10 @@ public class BoardGui extends TrueGridPane {
     public void refresh() {
         playerToPlay = Game.instance().getLatestGameState().getPlayerToPlay();
         setBoard();
+    }
+
+    public void bindGame(){
+        Game.instance().setBoardGui(this);
     }
 
 
@@ -53,6 +61,7 @@ public class BoardGui extends TrueGridPane {
                 }
             }
         }
+
     }
 
 
@@ -71,9 +80,22 @@ public class BoardGui extends TrueGridPane {
                 tileGui.getRectangle().setOnMouseClicked(event -> {
                     onMouseClicked(tileGui);
                     setBoard();
+                    checkIfDone();
                 });
                 boardMatrix[i][j] = tileGui;
             }
+        }
+    }
+
+    public void checkIfDone(){
+        if(BoardTools.isDone(Game.instance().getLatestGameState())){
+            int index = Game.instance().numberOfMoves();
+            Color playerWon = Game.instance().getMove(index - 1).getPlayerToPlay();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Game is over!\nPlayer won: " + playerWon.name() + "\nRestart game",
+                    ButtonType.OK);
+            alert.setHeaderText("Game over");
+            alert.showAndWait();
+            Game.instance().resetGame();
         }
     }
 
@@ -89,11 +111,6 @@ public class BoardGui extends TrueGridPane {
                 clicked = boardTileGui;
                 clicked.getRectangle().setFill(javafx.scene.paint.Color.GREEN);
             }
-//            else {
-//                // reset click
-//                clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
-//                clicked = null;
-//            }
             return;
         }
 
@@ -109,15 +126,16 @@ public class BoardGui extends TrueGridPane {
                 boardTileGui.getRectangle().setFill(javafx.scene.paint.Color.GREEN);
                 clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
                 clicked = boardTileGui;
+                isStrikeMove = true;
                 return;
             }
+            isStrikeMove = false;
         }
 
-
-        clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
-        clicked = null;
-
-
+        if(!isStrikeMove) {
+            clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
+            clicked = null;
+        }
     }
 
 
