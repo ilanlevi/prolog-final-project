@@ -17,7 +17,7 @@ public class GameSettings {
     public GameSettings() {
         level = SettingConst.DEFAULT_LEVEL;
         boardSize = SettingConst.DEFAULT_DIMENSIONS;
-        startingLinesPawns = 1;
+        setStartingLinesPawns();
     }
 
 
@@ -75,6 +75,8 @@ public class GameSettings {
         if (isBoardSizeValid(boardSize)) {
             this.boardSize = boardSize;
         }
+        if(!isStartingLinesPawnsValid(startingLinesPawns))
+            setStartingLinesPawns();
         return this;
     }
 
@@ -96,6 +98,11 @@ public class GameSettings {
      */
     public int getStartingLinesPawns() {
         return startingLinesPawns;
+    }
+
+    public GameSettings setStartingLinesPawns() {
+        setStartingLinesPawns((boardSize / 2) - 1);
+        return this;
     }
 
     /**

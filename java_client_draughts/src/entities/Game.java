@@ -36,7 +36,7 @@ public class Game {
         int size = gameState.size();
         if (size == 0)
             instance.gameState.add(new GameState(instance));
-        return gameState.get(0);
+        return gameState.get(size - 1);
     }
 
     public int numberOfMoves(){

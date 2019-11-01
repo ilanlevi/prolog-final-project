@@ -10,7 +10,7 @@ public class GameBoardTools {
         GameState gameState = new GameState(gameStateOld);
         Piece piece = gameState.getTile(i, j).getPiece();
         if (Math.abs(i - newI) == 1 && Math.abs(j - newJ) == 1) { // normal move, didn't eat
-            if (piece.isQueen() || i < newI) {
+            if (!piece.isQueen() && pieceGotBack(piece.getColor(), i, newI)) {
                 // only queen can go back
                 return null;
             }
@@ -25,8 +25,10 @@ public class GameBoardTools {
         if (canEat(gameStateOld, i, j, newI, newJ)) {
             gameState.removePiece((i + newI) / 2, (j + newJ) / 2);
             gameState.movePiece(i, j, newI, newJ);
-            if(!canEatAnyone(gameState, newI, newJ)) // cannot do strike
+            if(!canEatAnyone(gameState, newI, newJ)) { // cannot do strike
+                gameState.markNewQueensIfNeeded();
                 gameState.changePlayerToPlay();
+            }
             return gameState;
         }
 
@@ -65,18 +67,22 @@ public class GameBoardTools {
 
     public static boolean canEat(GameState gameStateOld, int i, int j, int newI, int newJ) {
         Piece piece = gameStateOld.getTile(i, j).getPiece();
+
         if (Math.abs(i - newI) != 2 || Math.abs(j - newJ) != 2) { // index for eating
             return false;
         }
+
+        BoardTile tile = gameStateOld.getTile(newI, newJ);
+        if(tile == null || !tile.isEmpty()) // new place isn't empty
+            return false;
+
 
         Piece stepOverPiece = getStepOverPiece(gameStateOld, i, j, newI, newJ);
 
         if (stepOverPiece == null || stepOverPiece.getColor().equals(piece.getColor())) // check color
             return false;
 
-        boolean gotBack = piece.getColor().equals(Color.WHITE) ? i  < newI : i > newI;
-
-        if (!gotBack && !isStrikeMove(gameStateOld) && !piece.isQueen()) {
+        if (!pieceGotBack(piece.getColor(), i, newI) && !isStrikeMove(gameStateOld) && !piece.isQueen()) {
             // first strike - cannot go back
             return false;
         }
@@ -86,6 +92,10 @@ public class GameBoardTools {
         // can go back
 
         return true;
+    }
+
+    public static boolean pieceGotBack(Color color, int i, int newI){
+        return color.equals(Color.WHITE) ? i  > newI : i < newI;
     }
 
     public static boolean canEatAnyone(GameState gameState, int i, int j) {
