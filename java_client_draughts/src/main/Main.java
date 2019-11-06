@@ -15,7 +15,6 @@ public class Main extends Application {
     public static Scene scene;
     public static Pane MainPane;
     public static Rectangle playerTurn;
-//    private ArrayList
 
     public static void main(String[] args) {
         Application.launch(Main.class, args);
