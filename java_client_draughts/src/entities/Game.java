@@ -64,8 +64,9 @@ public class Game {
     }
 
     public void goBackState() {
+        int s = instance.gameState.size();
         if (instance.gameState.size() > 0)
-            instance.gameState.remove(instance.gameState.size() - 1);
+            instance.gameState.remove(s - 1);
         Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
     }
 

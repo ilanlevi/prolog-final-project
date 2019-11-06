@@ -42,7 +42,7 @@ public class BoardGui extends TrueGridPane {
      * Sets the board with Checkers in accordance with the standard format of play
      */
     public void setBoard() {
-        getChildren().removeIf(x -> x instanceof ImageView);
+        getChildren().removeAll(getChildren().filtered(x -> x instanceof ImageView));
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 Piece piece = Game.instance().getLatestGameState().getTile(i, j).getPiece();
