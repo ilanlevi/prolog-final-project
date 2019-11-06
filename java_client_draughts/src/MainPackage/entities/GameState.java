@@ -24,7 +24,7 @@ public class GameState {
     }
 
     public GameState(Game game) {
-        this(Color.WHITE, MainPackage.tools.BoardTools.generateNewBoard(game.getSettings()));
+        this(Color.BLACK, MainPackage.tools.BoardTools.generateNewBoard(game.getSettings()));
     }
 
     public BoardTile[][] getTiles() {
@@ -113,7 +113,7 @@ public class GameState {
             int i = (int) ((Map) piece).get("i");
             int j = (int) ((Map) piece).get("j");
             Color color = Color.fromString((String) ((Map) piece).get("color"));
-            boolean isQueen = Boolean.getBoolean((String) ((Map) piece).get("isQueen"));
+            boolean isQueen = Boolean.parseBoolean((String) ((Map) piece).get("isQueen"));
             Piece pieceObject = new Piece(color, isQueen);
             newGameState.setPiece(i, j, pieceObject);
         }

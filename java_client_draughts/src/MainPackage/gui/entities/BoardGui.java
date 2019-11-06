@@ -1,13 +1,17 @@
 package MainPackage.gui.entities;
 
+import MainPackage.Main;
 import MainPackage.api.SendToServer;
 import MainPackage.entities.*;
+import MainPackage.tools.BoardTools;
+import MainPackage.tools.GameBoardTools;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
-import MainPackage.Main;
-import MainPackage.tools.BoardTools;
-import MainPackage.tools.GameBoardTools;
+import javafx.scene.shape.Rectangle;
+
+import java.util.Observable;
+import java.util.Optional;
 
 
 public class BoardGui extends TrueGridPane {
@@ -19,12 +23,15 @@ public class BoardGui extends TrueGridPane {
 
     private BoardTileGui[][] boardMatrix;
     private BoardTileGui clicked;
+    private Rectangle rectangle00;
+
+    private Observable observable = new Observable();
 
     public BoardGui(int boardSize) {
         super(boardSize, boardSize);
         this.boardSize = boardSize;
         boardMatrix = new BoardTileGui[boardSize][boardSize];
-        setPlayerToPlay(Color.WHITE);
+        setPlayerToPlay(Color.BLACK);
         setTiles();
         setBoard();
     }
@@ -32,9 +39,13 @@ public class BoardGui extends TrueGridPane {
     public void refresh() {
         setPlayerToPlay(Game.instance().getLatestGameState().getPlayerToPlay());
         setBoard();
+        Optional.ofNullable(rectangle00).ifPresent(rec -> {
+            System.out.println("clicked!@#");
+            rec.getOnMouseClicked().handle(null);
+        });
     }
 
-    public void bindGame(){
+    public void bindGame() {
         Game.instance().setBoardGui(this);
     }
 
@@ -43,19 +54,19 @@ public class BoardGui extends TrueGridPane {
      * Sets the board with Checkers in accordance with the standard format of play
      */
     public void setBoard() {
-        getChildren().removeAll(getChildren().filtered(x -> x instanceof ImageView));
+        getChildren().removeIf(x -> x instanceof ImageView);
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 Piece piece = Game.instance().getLatestGameState().getTile(i, j).getPiece();
-                boardMatrix[i][j].setIcon(piece);
-                ImageView imageView = boardMatrix[i][j].getImage();
+                BoardTileGui tileGui = boardMatrix[i][j];
+                tileGui.setIcon(piece);
+                ImageView imageView = tileGui.getImage();
                 if (imageView != null) {
                     imageView.fitWidthProperty().bind(cellWidthProperty());
                     imageView.fitHeightProperty().bind(cellHeightProperty());
-                    int finalI = i;
-                    int finalJ = j;
-                    imageView.setOnMouseClicked(event -> {
-                        onMouseClicked(boardMatrix[finalI][finalJ]);
+                    tileGui.getImage().setOnMouseClicked(event -> {
+                        onMouseClicked(tileGui);
+                        checkIfDone();
                         setBoard();
                     });
                     add(imageView, j, i);
@@ -63,7 +74,6 @@ public class BoardGui extends TrueGridPane {
                 }
             }
         }
-
     }
 
 
@@ -73,6 +83,7 @@ public class BoardGui extends TrueGridPane {
     private void setTiles() {
         for (int j = 0; j < boardSize; j++) {
             for (int i = 0; i < boardSize; i++) {
+
                 BoardTileGui tileGui = new BoardTileGui(i, j);
                 tileGui.getRectangle().widthProperty().bind(cellWidthProperty());
                 tileGui.getRectangle().heightProperty().bind(cellHeightProperty());
@@ -85,12 +96,15 @@ public class BoardGui extends TrueGridPane {
                     checkIfDone();
                 });
                 boardMatrix[i][j] = tileGui;
+                if (i == 0 && j == 0) {
+                    rectangle00 = tileGui.getRectangle();
+                }
             }
         }
     }
 
-    public void checkIfDone(){
-        if(BoardTools.isDone(Game.instance().getLatestGameState())){
+    public void checkIfDone() {
+        if (BoardTools.isDone(Game.instance().getLatestGameState())) {
             int index = Game.instance().numberOfMoves();
             Color playerWon = Game.instance().getMove(index - 2).getPlayerToPlay();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Game is over!\nPlayer won: " + playerWon.name() + "\nRestart game",
@@ -124,7 +138,7 @@ public class BoardGui extends TrueGridPane {
             Color old = getPlayerToPlay();
             Game.instance().addNewState(newState);
             refresh();
-            if(old == getPlayerToPlay()){
+            if (old == getPlayerToPlay()) {
                 boardTileGui.getRectangle().setFill(javafx.scene.paint.Color.GREEN);
                 clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
                 clicked = boardTileGui;
@@ -134,18 +148,11 @@ public class BoardGui extends TrueGridPane {
             isStrikeMove = false;
         }
 
-        if(!isStrikeMove) {
+        if (!isStrikeMove) {
             clicked.getRectangle().setFill(BoardTileGui.rectangleColor(clicked.getRow(), clicked.getColumn()));
             clicked = null;
-            if(playerToPlay.equals(Color.BLACK)){
-                GameState state = SendToServer.getServerNextMove(Game.instance().getLatestGameState());
-                if(state != null){
-                    System.out.println("blabla");
-                    System.out.println(state);
-                    state.markNewQueensIfNeeded();
-                    Game.instance().addNewState(state);
-                }
-
+            if (playerToPlay.equals(Color.WHITE)) {
+                SendToServer.instance.AsyncSendToServer(Game.instance().getLatestGameState());
             }
 
         }

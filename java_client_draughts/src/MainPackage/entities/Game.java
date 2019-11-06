@@ -1,6 +1,7 @@
 package MainPackage.entities;
 
 import MainPackage.gui.entities.BoardGui;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.Optional;
