@@ -23,9 +23,6 @@ public class BoardGui extends TrueGridPane {
 
     private BoardTileGui[][] boardMatrix;
     private BoardTileGui clicked;
-    private Rectangle rectangle00;
-
-    private Observable observable = new Observable();
 
     public BoardGui(int boardSize) {
         super(boardSize, boardSize);
@@ -39,10 +36,6 @@ public class BoardGui extends TrueGridPane {
     public void refresh() {
         setPlayerToPlay(Game.instance().getLatestGameState().getPlayerToPlay());
         setBoard();
-        Optional.ofNullable(rectangle00).ifPresent(rec -> {
-            System.out.println("clicked!@#");
-            rec.getOnMouseClicked().handle(null);
-        });
     }
 
     public void bindGame() {
@@ -97,9 +90,6 @@ public class BoardGui extends TrueGridPane {
                     checkIfDone();
                 });
                 boardMatrix[i][j] = tileGui;
-                if (i == 0 && j == 0) {
-                    rectangle00 = tileGui.getRectangle();
-                }
             }
         }
     }
@@ -121,7 +111,6 @@ public class BoardGui extends TrueGridPane {
             for (int j = 0; j < Game.instance().getSettings().getBoardSize(); j++) {
                 boardMatrix[i][j].getRectangle().setFill(BoardTileGui.rectangleColor(i, j));
             }
-
         }
     }
 

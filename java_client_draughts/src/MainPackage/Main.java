@@ -22,7 +22,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        System.out.println(System.getProperty("user.dir"));
         Parent root = FXMLLoader.load(getClass().getResource("gui/fxml/MainPane.fxml"));
         stage.setTitle("Draughts");
         scene = new Scene(root, 900, 750);
