@@ -16,7 +16,7 @@ public class SendToServer {
     public static final String SERVER_ADDRESS = "http://localhost";
 
 
-    public static Future<GameState> getServerNextMove(GameState currentState) {
+    public static GameState getServerNextMove(GameState currentState) {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(SERVER_ADDRESS + ":" + SERVER_PORT);
