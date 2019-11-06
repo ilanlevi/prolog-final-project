@@ -15,7 +15,15 @@ public class GameState {
 
     public GameState(GameState toCopy) {
         this.playerToPlay = toCopy.getPlayerToPlay();
-        this.tiles = toCopy.getTiles().clone();
+        int length = toCopy.tiles.length;
+        this.tiles = new BoardTile[length][length];
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < length; j++) {
+                BoardTile boardTileToCopy = toCopy.tiles[i][j];
+                Piece piece = boardTileToCopy.getPiece();
+                tiles[i][j] = new BoardTile(boardTileToCopy.getTileColor(), piece==null?null:piece.clonePiece());
+            }
+        }
     }
 
     public GameState(Color playerToPlay, BoardTile[][] tiles) {

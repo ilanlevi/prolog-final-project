@@ -1,5 +1,7 @@
 package MainPackage.entities;
 
+import java.util.Objects;
+
 public class Piece {
 
     private Color color;
@@ -8,6 +10,10 @@ public class Piece {
     public Piece(Color color, boolean queen) {
         this(color);
         this.queen = queen;
+    }
+
+    public Piece clonePiece(){
+        return new Piece(this.color,this.queen);
     }
 
     public Piece(Color color) {
@@ -42,5 +48,19 @@ public class Piece {
     public String toJson(int i, int j) {
         return "{\"i\":" + i + ",\"j\":" + j +
                 ", \"color\":" + "\"" + color.getName() + "\"" + ",\"isQueen\":" + isQueen() + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Piece piece = (Piece) o;
+        return queen == piece.queen &&
+                color == piece.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, queen);
     }
 }

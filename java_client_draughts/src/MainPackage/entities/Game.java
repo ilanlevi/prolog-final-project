@@ -45,6 +45,10 @@ public class Game {
         Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
     }
 
+    public int getSize(){
+        return gameState.size();
+    }
+
     public GameState getLatestGameState() {
         int size = instance.gameState.size();
         if (size == 0) {
@@ -66,15 +70,20 @@ public class Game {
 
     public void goBackState() {
         int s = instance.gameState.size();
-        if (instance.gameState.size() > 0)
-            instance.gameState.remove(s - 1);
+        if (instance.gameState.size() > 1) {
+            instance.gameState.remove(s -1);
+            instance.gameState.remove(s -2);
+            instance().getBoardGui().resetBoardColor();
+        }
         Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
+
     }
 
     public void addNewState(GameState state) {
-        if (state != null)
+        if (state != null) {
             instance.gameState.add(state);
-        Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
+            Optional.ofNullable(instance.boardGui).ifPresent(BoardGui::refresh);
+        }
     }
 
 }

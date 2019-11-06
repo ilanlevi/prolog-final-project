@@ -1,5 +1,7 @@
 package MainPackage.entities;
 
+import java.util.Objects;
+
 public class BoardTile {
 
     private Color tileColor;
@@ -7,6 +9,11 @@ public class BoardTile {
 
     public BoardTile(Color tileColor) {
         this.tileColor = tileColor;
+    }
+
+    public BoardTile(Color tileColor, Piece piece) {
+        this.tileColor = tileColor;
+        this.piece = piece;
     }
 
     public Color getTileColor() {
@@ -28,6 +35,20 @@ public class BoardTile {
             this.piece = piece;
         }
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardTile boardTile = (BoardTile) o;
+        return tileColor == boardTile.tileColor &&
+                Objects.equals(piece, boardTile.piece);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tileColor, piece);
     }
 
     public boolean isEmpty() {

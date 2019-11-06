@@ -71,6 +71,7 @@ public class BoardGui extends TrueGridPane {
                     });
                     add(imageView, j, i);
                     imageView.toFront();
+
                 }
             }
         }
@@ -112,6 +113,32 @@ public class BoardGui extends TrueGridPane {
             alert.setHeaderText("Game over");
             alert.showAndWait();
             Game.instance().resetGame();
+        }
+    }
+
+    public void resetBoardColor() {
+        for (int i = 0; i < Game.instance().getSettings().getBoardSize(); i++) {
+            for (int j = 0; j < Game.instance().getSettings().getBoardSize(); j++) {
+                boardMatrix[i][j].getRectangle().setFill(BoardTileGui.rectangleColor(i, j));
+            }
+
+        }
+    }
+
+    public void markMove() {
+        int size = Game.instance().getSize();
+        GameState latest = Game.instance().getLatestGameState();
+        GameState onBefore = Game.instance().getMove(size - 2);
+        for (int i = 0; i < Game.instance().getSettings().getBoardSize(); i++) {
+            for (int j = 0; j < Game.instance().getSettings().getBoardSize(); j++) {
+
+                if (!latest.getTile(i, j).equals(onBefore.getTile(i, j))) {
+                    boardMatrix[i][j].getRectangle().setFill(javafx.scene.paint.Color.AQUA);
+                } else {
+                    boardMatrix[i][j].getRectangle().setFill(BoardTileGui.rectangleColor(i, j));
+
+                }
+            }
         }
     }
 

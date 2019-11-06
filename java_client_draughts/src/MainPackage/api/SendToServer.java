@@ -39,6 +39,7 @@ public class SendToServer {
 //                BoardGui boardGui = new BoardGui(Game.instance().getSettings().getBoardSize());
 
 //                Game.instance().getBoardGui().getChildren().
+                Game.instance().getBoardGui().markMove();
             }
         });
 
