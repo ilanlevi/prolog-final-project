@@ -15,6 +15,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.Main;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -56,8 +58,7 @@ public class MainFrameController {
     @FXML
     private void handleSettings(ActionEvent event) {
         try {
-            mainPane.getChildren().clear();
-            mainPane.getChildren().add(0, FXMLLoader.load(getClass().getResource("/gui/fxml/SettingPane.fxml")));
+            showWindow("/gui/fxml/SettingPane.fxml");
         } catch (Exception e) {
             System.err.println("Settings window load error!\n" + e.getMessage());
         }
@@ -82,11 +83,23 @@ public class MainFrameController {
     public void createNewGame(ActionEvent event) {
         try {
             // TODO: 18/10/2019 Change string to constst
-            mainPane.getChildren().clear();
-            mainPane.getChildren().add(0, FXMLLoader.load(getClass().getResource("/gui/fxml/GameGrid.fxml")));
+            showWindow("/gui/fxml/GameGrid.fxml");
             Game.instance().resetGame();
         } catch (Exception e) {
             System.err.println("Board window load error!\n" + e.getMessage());
+        }
+    }
+
+    private void showWindow(String pathToScene) throws java.io.IOException {
+        mainPane.getChildren().clear();
+        mainPane.getChildren().add(0, FXMLLoader.load(getClass().getResource(pathToScene)));
+    }
+
+    public void showGame(ActionEvent event){
+        try {
+            showWindow("/gui/fxml/GameGrid.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

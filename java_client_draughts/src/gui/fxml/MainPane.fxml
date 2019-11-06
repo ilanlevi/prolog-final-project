@@ -10,9 +10,10 @@
       <menus>
         <Menu mnemonicParsing="false" text="Game">
           <items>
+<!--            TODO wtire to do below-->
             <!--            todo-->
             <MenuItem mnemonicParsing="false" onAction="#handleUndo" text="Undo" />
-            <MenuItem mnemonicParsing="false" onAction="#createNewGame" text="Restart" />
+            <MenuItem mnemonicParsing="false" onAction="#showGame" text="Show game" />
             <MenuItem mnemonicParsing="false" onAction="#createNewGame" text="New game" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Quit" />
