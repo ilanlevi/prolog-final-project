@@ -64,7 +64,7 @@ public class BoardTools {
      * @return true if done, false otherwise
      */
     public static boolean isDone(GameState state) {
-        return isDoneNoPieces(state) || doneCannotMove(state);
+        return isDoneNoPieces(state) || isDoneCannotMove(state);
     }
 
     /**
@@ -103,9 +103,11 @@ public class BoardTools {
      * @param state the game state to check
      * @return true if done, false otherwise
      */
-    public static boolean doneCannotMove(GameState state) {
+    public static boolean isDoneCannotMove(GameState state) {
+        // TODO: 08/11/2019 Fix this shit
         int blackPawns = 0;
         int whitePawns = 0;
+        int[][] possibleMoves = {{-2, -2}, {-2, 2}, {2, -2}, {2, 2}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; // all possible moves
 
         int length = Game.instance().getSettings().getBoardSize();
         // go over board
@@ -114,24 +116,23 @@ public class BoardTools {
                 BoardTile t = state.getTile(i, j);
 
                 if (!t.isEmpty()) { // if the tile has a pawn
+                    Color c = t.getPiece().getColor();
                     // create all possible moves
-                    for (int k = -2; k < 3; k++) {
-                        for (int l = -2; l < 3; l++) {
-
-                            // try to move
-                            GameState gameState = GameBoardTools.move(state, i, j, i + k, j + l);
-                            if (gameState != null) {
-                                // move is valid
-                                if (t.getPiece().getColor() == Color.WHITE) {
-                                    whitePawns++;
-                                } else {
-                                    blackPawns++;
-                                }
-                                if (blackPawns > 0 && whitePawns > 0) { // both player's has at least 1 pawn that can move, stop the loop
-                                    return false;
-                                }
+                    for (int[] possibleMove : possibleMoves) {
+                        // try to move
+                        GameState gameState = GameBoardTools.move(state, i, j, i + possibleMove[0], j + possibleMove[1]);
+                        if (gameState != null) {
+                            // move is valid
+                            if (c == Color.WHITE) {
+                                whitePawns++;
+                            } else {
+                                blackPawns++;
                             }
                         }
+                        if (blackPawns > 0 && whitePawns > 0) { // both player's has at least 1 pawn that can move, stop the loop
+                            return false;
+                        }
+
                     }
                 }
             }
