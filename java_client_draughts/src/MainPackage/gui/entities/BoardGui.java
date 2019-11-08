@@ -8,10 +8,6 @@ import MainPackage.tools.GameBoardTools;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Rectangle;
-
-import java.util.Observable;
-import java.util.Optional;
 
 
 public class BoardGui extends TrueGridPane {

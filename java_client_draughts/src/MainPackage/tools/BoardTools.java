@@ -14,7 +14,6 @@ public class BoardTools {
     public static BoardTile[][] generateNewBoard(GameSettings gameSettings) {
         BoardTile[][] boardTiles = new BoardTile[gameSettings.getBoardSize()][gameSettings.getBoardSize()];
 
-//        int emptyTiles = gameSettings.getBoardSize() - gameSettings.getStartingLinesPawns() * 2; // get number of empty tiles
         int whitePlayerTiles = getInitializeTilesNumberForBoard(gameSettings); // get number of empty tiles
         int emptyTiles = (gameSettings.getBoardSize() - gameSettings.getStartingLinesPawns() * 2) * gameSettings.getBoardSize() / 2; // get number of whitePlayerTiles
 
@@ -57,19 +56,16 @@ public class BoardTools {
         return gameSettings.getStartingLinesPawns() * gameSettings.getBoardSize() / 2;
     }
 
+
     /**
-     * Create suitable tile: White or black.
-     *      The black tile may be empty or below a black/white pawn, depending on params value.
+     * Return if the game is done.
      *
-     * @param index the index of the tile - when even number the tile will be white, or else black.
-     * @param whitePlayerTilesLeft - only on black tile: if bigger then 0, add a white pawn and decreases by 1.
-     * @param emptyTilesLeft - only on black tile: if bigger then 0, remain empty and decreases by 1.
-     *                       Else (whitePlayerTilesLeft <= 0 & emptyTilesLeft  <= 0), add a black pawn.
-     * @return new suitable tile
+     * @param state the game state to check
+     * @return true if done, false otherwise
      */
-//    public static BoardTile generateNewTile(int index, Integer emptyTilesLeft, Integer whitePlayerTilesLeft) {
-//
-//    }
+    public static boolean isDone(GameState state) {
+        return isDoneNoPieces(state) || doneCannotMove(state);
+    }
 
     /**
      * Return if the game is done. (one of the player has not pawns on the board)
@@ -77,7 +73,7 @@ public class BoardTools {
      * @param state the game state to check
      * @return true if done, false otherwise
      */
-    public static boolean isDone(GameState state) {
+    public static boolean isDoneNoPieces(GameState state) {
         int blackPawns = 0;
         int whitePawns = 0;
 
@@ -100,6 +96,50 @@ public class BoardTools {
         }
         return true;
     }
+
+    /**
+     * Return if the game is done. (one of the player cannot move any where)
+     *
+     * @param state the game state to check
+     * @return true if done, false otherwise
+     */
+    public static boolean doneCannotMove(GameState state) {
+        int blackPawns = 0;
+        int whitePawns = 0;
+
+        int length = Game.instance().getSettings().getBoardSize();
+        // go over board
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < length; j++) {
+                BoardTile t = state.getTile(i, j);
+
+                if (!t.isEmpty()) { // if the tile has a pawn
+                    // create all possible moves
+                    for (int k = -2; k < 3; k++) {
+                        for (int l = -2; l < 3; l++) {
+
+                            // try to move
+                            GameState gameState = GameBoardTools.move(state, i, j, i + k, j + l);
+                            if (gameState != null) {
+                                // move is valid
+                                if (t.getPiece().getColor() == Color.WHITE) {
+                                    whitePawns++;
+                                } else {
+                                    blackPawns++;
+                                }
+                                if (blackPawns > 0 && whitePawns > 0) { // both player's has at least 1 pawn that can move, stop the loop
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+
+    }
+
 
 }
 
