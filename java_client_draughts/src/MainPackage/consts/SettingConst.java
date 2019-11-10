@@ -30,4 +30,7 @@ public class SettingConst {
      */
     public static final String SERVER_LOCAL_HOST = "127.0.0.1";
     public static final int SERVER_PORT = 3000;
+
+    public static final String SERVER_PREFIX_FOR_HTTP = "http://";
+    public static final String SERVER_INFIX_FOR_PORT = ":";
 }

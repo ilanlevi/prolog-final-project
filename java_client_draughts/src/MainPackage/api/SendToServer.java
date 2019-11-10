@@ -1,10 +1,8 @@
 package MainPackage.api;
 
-import MainPackage.Main;
-import MainPackage.entities.BoardTile;
 import MainPackage.entities.Game;
+import MainPackage.entities.GameSettings;
 import MainPackage.entities.GameState;
-import MainPackage.gui.entities.BoardGui;
 import javafx.application.Platform;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -13,22 +11,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.util.concurrent.*;
-
 public class SendToServer {
 
-    public static final int SERVER_PORT = 3000;
-    public static final String SERVER_ADDRESS = "http://localhost";
-
-    private ExecutorService executorService;
-
-    public static SendToServer instance = new SendToServer();
-
-    private SendToServer(){
-        executorService =  Executors.newSingleThreadExecutor();
-    }
-
-    public void AsyncSendToServer(GameState currentState){
+    /**
+     * Send current state to server, wait for response and update gui and current game state
+     *
+     * @param currentState for server to do next move
+     */
+    public static void AsyncSendToServer(GameState currentState) {
         Platform.runLater(() -> {
             GameState gameState = getServerNextMove(currentState);
             if (gameState != null) {
@@ -41,10 +31,17 @@ public class SendToServer {
 
     }
 
-    private GameState getServerNextMove(GameState currentState) {
+    /**
+     * Send to server http request with the current game state and game settings level to compute next move
+     *
+     * @param currentState the game state
+     * @return new game state after PC move, if cannot reach server, show message
+     */
+    private static GameState getServerNextMove(GameState currentState) {
         try {
+            GameSettings gameSettings = Game.instance().getSettings();
             CloseableHttpClient client = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost(SERVER_ADDRESS + ":" + SERVER_PORT);
+            HttpPost httpPost = new HttpPost(gameSettings.getServerFullUrl());
 
             httpPost.addHeader("Content-type", "application/json");
             httpPost.addHeader("Accept", "application/json");
@@ -52,28 +49,24 @@ public class SendToServer {
             System.out.println(entity);
             httpPost.setEntity(new StringEntity(entity));
 
-
             CloseableHttpResponse response = null;
 
             response = client.execute(httpPost);
+            String responseString = null;
+            GameState gameState = null;
 
             if (response.getStatusLine().getStatusCode() != 200) {
                 System.err.println("Cannot find server, exiting!");
-                System.exit(1);
+            } else {
+                responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
+                gameState = GameState.fromJsonArray(currentState, responseString);
             }
-
-            String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
-
-
-            GameState gameState = GameState.fromJsonArray(currentState, responseString);
-
 
             client.close();
             return gameState;
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Cannot find server, exiting!");
-            System.exit(1);
+            System.err.println("Cannot find server!");
         }
         return null;
 

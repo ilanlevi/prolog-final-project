@@ -164,7 +164,10 @@ public class GameSettings {
         return this;
     }
 
+    /**
+     * @return full server url, form: http://SERVER_IP:SERVER_PORT
+     */
     public String getServerFullUrl() {
-        return serverUrl + ":" + serverPort;
+        return SettingConst.SERVER_PREFIX_FOR_HTTP + serverUrl + SettingConst.SERVER_INFIX_FOR_PORT + serverPort;
     }
 }

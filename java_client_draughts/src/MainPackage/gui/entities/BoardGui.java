@@ -187,9 +187,8 @@ public class BoardGui extends TrueGridPane {
             clicked = null;
             if (playerToPlay.equals(Color.WHITE)) {
                 // send to server for response if it is his turn
-                SendToServer.instance.AsyncSendToServer(Game.instance().getLatestGameState());
+                SendToServer.AsyncSendToServer(Game.instance().getLatestGameState());
             }
-
         }
     }
 
@@ -202,6 +201,7 @@ public class BoardGui extends TrueGridPane {
 
     /**
      * Set this.playerToPlay color
+     *
      * @param playerToPlay new player turn
      */
     private void setPlayerToPlay(Color playerToPlay) {
@@ -209,5 +209,3 @@ public class BoardGui extends TrueGridPane {
         Main.playerTurn.setFill(playerToPlay.equals(Color.WHITE) ? javafx.scene.paint.Color.WHITE : javafx.scene.paint.Color.BLACK);
     }
 }
-
-;
