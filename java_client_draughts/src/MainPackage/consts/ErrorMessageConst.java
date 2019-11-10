@@ -10,6 +10,8 @@ public class ErrorMessageConst {
     public static final String PAWN_LINES_ERROR_MESSAGE = "The size is invalid - " +
             "please enter a number bigger then 0 and smaller then half of board size";
 
+    public static final String SERVER_URL_EMPTY_ERROR_MESSAGE = "Server address is empty, please enter server ip!";
+
     public static final String EMPTY_MESSAGE = "";
 
     public static final String NOT_A_NUMBER_MESSAGE = "Please insert numbers only!";

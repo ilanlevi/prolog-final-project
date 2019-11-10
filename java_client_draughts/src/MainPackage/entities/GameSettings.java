@@ -7,6 +7,8 @@ public class GameSettings {
     private int level;
     private int boardSize;
     private int startingLinesPawns; // how many pawn lines for each player
+    private String serverUrl;
+    private int serverPort;
 
     /**
      * Initialize values with default values
@@ -18,6 +20,8 @@ public class GameSettings {
         level = SettingConst.DEFAULT_LEVEL;
         boardSize = SettingConst.DEFAULT_DIMENSIONS;
         setStartingLinesPawns();
+        serverPort = SettingConst.SERVER_PORT;
+        serverUrl = SettingConst.SERVER_LOCAL_HOST;
     }
 
 
@@ -75,7 +79,7 @@ public class GameSettings {
         if (isBoardSizeValid(boardSize)) {
             this.boardSize = boardSize;
         }
-        if(!isStartingLinesPawnsValid(startingLinesPawns))
+        if (!isStartingLinesPawnsValid(startingLinesPawns))
             setStartingLinesPawns();
         return this;
     }
@@ -132,12 +136,35 @@ public class GameSettings {
         return startingLinesPawns >= SettingConst.MIN_PAWS_LINES && startingLinesPawns < boardSize / 2;
     }
 
-    @Override
-    public String toString() {
-        return "GameSettings{" +
-                "level=" + level +
-                ", boardSize=" + boardSize +
-                ", startingLinesPawns=" + startingLinesPawns +
-                '}';
+    /**
+     * Check and return if the serverUrl value if valid.
+     *
+     * @param serverUrl server ip as string
+     * @return not null and not empty will return true, or false otherwise
+     */
+    public boolean isServerURLValid(String serverUrl) {
+        return serverUrl != null && !serverUrl.isEmpty();
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public GameSettings setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+        return this;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public GameSettings setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+        return this;
+    }
+
+    public String getServerFullUrl() {
+        return serverUrl + ":" + serverPort;
     }
 }

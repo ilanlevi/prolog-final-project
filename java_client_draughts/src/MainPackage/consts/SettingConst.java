@@ -24,4 +24,10 @@ public class SettingConst {
      * how many pawn lines of pawns for each player const
      */
     public static final int MIN_PAWS_LINES = 1;
+
+    /**
+     * Server communication defaults
+     */
+    public static final String SERVER_LOCAL_HOST = "127.0.0.1";
+    public static final int SERVER_PORT = 3000;
 }
