@@ -1,12 +1,15 @@
 package MainPackage.gui.entities;
 
 import MainPackage.entities.Piece;
+import MainPackage.tools.IconTools;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import MainPackage.tools.IconTools;
 
+/**
+ * Similar to {@link MainPackage.entities.BoardTile} just for gui
+ */
 public class BoardTileGui {
     private Rectangle rectangle;
     private ImageView imageView;
@@ -17,13 +20,6 @@ public class BoardTileGui {
         this.column = column;
         rectangle = new Rectangle();
         rectangle.setFill(rectangleColor(row, column));
-    }
-
-    public BoardTileGui(Rectangle rectangle, ImageView imageView, int row, int column) {
-        this.rectangle = rectangle;
-        this.imageView = imageView;
-        this.row = row;
-        this.column = column;
     }
 
     public BoardTileGui setIcon(Piece piece) {

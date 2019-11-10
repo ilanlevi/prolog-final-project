@@ -133,7 +133,6 @@ public class BoardTools {
                         }
                     }
                 }
-                System.out.println("black: " + blackPawns + ", white: " + whitePawns);
             }
         }
         return true;
