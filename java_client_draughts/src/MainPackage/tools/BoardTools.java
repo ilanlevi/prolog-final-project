@@ -104,7 +104,6 @@ public class BoardTools {
      * @return true if done, false otherwise
      */
     public static boolean isDoneCannotMove(GameState state) {
-        // TODO: 08/11/2019 Fix this shit
         int blackPawns = 0;
         int whitePawns = 0;
         int[][] possibleMoves = {{-2, -2}, {-2, 2}, {2, -2}, {2, 2}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; // all possible moves
@@ -120,7 +119,7 @@ public class BoardTools {
                     // create all possible moves
                     for (int[] possibleMove : possibleMoves) {
                         // try to move
-                        GameState gameState = GameBoardTools.move(state, i, j, i + possibleMove[0], j + possibleMove[1]);
+                        GameState gameState = GameBoardTools.move(state, i, j, i + possibleMove[0], j + possibleMove[1], false);
                         if (gameState != null) {
                             // move is valid
                             if (c == Color.WHITE) {
@@ -128,13 +127,13 @@ public class BoardTools {
                             } else {
                                 blackPawns++;
                             }
+                            if (blackPawns > 0 && whitePawns > 0) { // both player's has at least 1 pawn that can move, stop the loop
+                                return false;
+                            }
                         }
-                        if (blackPawns > 0 && whitePawns > 0) { // both player's has at least 1 pawn that can move, stop the loop
-                            return false;
-                        }
-
                     }
                 }
+                System.out.println("black: " + blackPawns + ", white: " + whitePawns);
             }
         }
         return true;

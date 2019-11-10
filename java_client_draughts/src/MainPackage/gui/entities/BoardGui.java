@@ -55,12 +55,11 @@ public class BoardGui extends TrueGridPane {
                     imageView.fitHeightProperty().bind(cellHeightProperty());
                     tileGui.getImage().setOnMouseClicked(event -> {
                         onMouseClicked(tileGui);
-                        checkIfDone();
                         setBoard();
+                        checkIfDone();
                     });
                     add(imageView, j, i);
                     imageView.toFront();
-
                 }
             }
         }
@@ -93,6 +92,8 @@ public class BoardGui extends TrueGridPane {
     public void checkIfDone() {
         if (BoardTools.isDone(Game.instance().getLatestGameState())) {
             int index = Game.instance().numberOfMoves();
+            if(index < 2)
+                return;
             Color playerWon = Game.instance().getMove(index - 2).getPlayerToPlay();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Game is over!\nPlayer won: " + playerWon.name() + "\nRestart game",
                     ButtonType.OK);
@@ -145,7 +146,7 @@ public class BoardGui extends TrueGridPane {
         // else - a piece was picked already
 
         GameState currState = Game.instance().getLatestGameState();
-        GameState newState = GameBoardTools.move(currState, clicked.getRow(), clicked.getColumn(), boardTileGui.getRow(), boardTileGui.getColumn());
+        GameState newState = GameBoardTools.move(currState, clicked.getRow(), clicked.getColumn(), boardTileGui.getRow(), boardTileGui.getColumn(), true);
         if (newState != null) {
             Color old = getPlayerToPlay();
             Game.instance().addNewState(newState);

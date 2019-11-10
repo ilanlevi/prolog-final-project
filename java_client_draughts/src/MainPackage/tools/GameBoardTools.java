@@ -12,11 +12,12 @@ public class GameBoardTools {
      * @param j y index of piece
      * @param newI new x index
      * @param newJ new y index
+     * @param checkPlayer check playing player (for checking if game is done)
      * @return The new state, if the move was invalid return null.
      */
-    public static GameState move(GameState gameStateOld, int i, int j, int newI, int newJ) {
+    public static GameState move(GameState gameStateOld, int i, int j, int newI, int newJ, boolean checkPlayer) {
         // check if valid
-        if (!isValidMove(gameStateOld, i, j, newI, newJ))
+        if (!isValidMove(gameStateOld, i, j, newI, newJ, checkPlayer))
             return null;
         GameState gameState = new GameState(gameStateOld);
         Piece piece = gameState.getTile(i, j).getPiece();
@@ -72,9 +73,10 @@ public class GameBoardTools {
      * @param j y index of piece
      * @param newI new x index
      * @param newJ new y index
+     * @param checkPlayer check playing player (for checking if game is done)
      * @return true if the move was valid, else return false.
      */
-    public static boolean isValidMove(GameState gameStateOld, int i, int j, int newI, int newJ) {
+    public static boolean isValidMove(GameState gameStateOld, int i, int j, int newI, int newJ, boolean checkPlayer) {
         if (newI < 0 || newJ < 0 || newI >= Game.instance().getSettings().getBoardSize() || newJ >= Game.instance().getSettings().getBoardSize())
             // check bounds
             return false;
@@ -84,7 +86,7 @@ public class GameBoardTools {
         BoardTile oldTile = gameStateOld.getTile(i, j);
         BoardTile newTile = gameStateOld.getTile(newI, newJ);
 
-        if (oldTile.isEmpty() || !newTile.isEmpty() || !oldTile.getPiece().getColor().equals(gameStateOld.getPlayerToPlay()))
+        if (oldTile.isEmpty() || !newTile.isEmpty() || (checkPlayer && !oldTile.getPiece().getColor().equals(gameStateOld.getPlayerToPlay())))
             // check if this cell isn't empty + new one is empty + this cell is the same color as player
             return false;
 

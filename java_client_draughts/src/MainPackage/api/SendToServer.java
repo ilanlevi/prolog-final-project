@@ -35,10 +35,6 @@ public class SendToServer {
                 gameState.markNewQueensIfNeeded();
                 System.err.println(gameState);
                 Game.instance().addNewState(gameState);
-//                Game.instance().getBoardGui().bindGame();
-//                BoardGui boardGui = new BoardGui(Game.instance().getSettings().getBoardSize());
-
-//                Game.instance().getBoardGui().getChildren().
                 Game.instance().getBoardGui().markMove();
             }
         });
