@@ -154,7 +154,7 @@ public class GameState {
         return "{\"state\": "
                 + pieces.toString() +
                 ",\"settings\":{"
-                + "\"level\": " + Game.instance().getSettings().getLevel() + "," +
+                + "\"level\": " + Game.instance().getSettings().getLevel().toJson() + "," +
                 "\"rows\": " + boardSize +
                 "}" +
                 "}";

@@ -6,11 +6,9 @@ import MainPackage.Main;
 import MainPackage.consts.ErrorMessageConst;
 import MainPackage.entities.Game;
 import MainPackage.entities.GameSettings;
+import MainPackage.entities.Level;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -51,6 +49,9 @@ public class SettingPaneController extends Pane {
     @FXML // fx:id="SetButton"
     private Button SetButton; // Value injected by FXMLLoader
 
+    @FXML // fx:id="levelComboBox"
+    private ComboBox<Level> levelComboBox; // Value injected by FXMLLoader
+
 
     private GameSettings settings = new GameSettings();
 
@@ -63,8 +64,7 @@ public class SettingPaneController extends Pane {
     private void handleSet() {
         ErrorMsgText.setText(ErrorMessageConst.EMPTY_MESSAGE);
 
-        if (!validateTextIsNumber(LevelText.getText()) ||
-                !validateTextIsNumber(BoardSizeText.getText()) ||
+        if (    !validateTextIsNumber(BoardSizeText.getText()) ||
                 !validateTextIsNumber(PawnsLinesText.getText()) ||
                 !validateTextIsNumber(ServerAddressPort.getText())
         ) {
@@ -72,12 +72,13 @@ public class SettingPaneController extends Pane {
             return;
         }
 
-        int level = Integer.parseInt(LevelText.getText());
         int boardSize = Integer.parseInt(BoardSizeText.getText());
         int linesOfPawns = Integer.parseInt(PawnsLinesText.getText());
         int serverPort = Integer.parseInt(ServerAddressPort.getText());
 
         settings.setServerPort(serverPort);
+
+        Level level = levelComboBox.valueProperty().get();
 
         if (!settings.isLevelValid(level)) {
             ErrorMsgText.setText(ErrorMessageConst.LEVEL_ERROR_MESSAGE);
@@ -135,6 +136,10 @@ public class SettingPaneController extends Pane {
         assert ServerAddressText != null : "fx:id=\"ServerAddressText\" was not injected: check your FXML file 'SettingPane.fxml'.";
         assert ServerAddressPort != null : "fx:id=\"ServerAddressPort\" was not injected: check your FXML file 'SettingPane.fxml'.";
         assert MainPane != null : "fx:id=\"MainPane\" was not injected: check your FXML file 'SettingPane.fxml'.";
+        assert levelComboBox != null : "fx:id=\"MainPane\" was not injected: check your FXML file 'SettingPane.fxml'.";
+
+        levelComboBox.getItems().addAll(Level.values());
+        levelComboBox.valueProperty().setValue(Game.instance().getSettings().getLevel());
 
         MainPane.prefWidthProperty().bind(Main.scene.widthProperty());
         MainPane.prefHeightProperty().bind(Main.scene.heightProperty());

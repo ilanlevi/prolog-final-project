@@ -1,8 +1,7 @@
 package MainPackage.consts;
 
 public class ErrorMessageConst {
-    public static final String LEVEL_ERROR_MESSAGE = "The Level is invalid - please enter a number in range: " +
-            "[" + SettingConst.MIN_LEVEL + ", " + SettingConst.MAX_LEVEL + "]";
+    public static final String LEVEL_ERROR_MESSAGE = "The Level is invalid - please choose an option!";
 
     public static final String BOARD_SIZE_ERROR_MESSAGE = "The Board size is invalid - please enter a number in range: " +
             "[" + SettingConst.MIN_DIMENSIONS + ", " + SettingConst.MAX_DIMENSIONS + "]";

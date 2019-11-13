@@ -5,13 +5,6 @@ package MainPackage.consts;
  * Each setting has the following values: max, min and default
  */
 public class SettingConst {
-// TODO: 01/11/2019 change const -> and write in info
-    /**
-     * Level const
-     */
-    public static final int MAX_LEVEL = 7;
-    public static final int MIN_LEVEL = 1;
-    public static final int DEFAULT_LEVEL = 3;
 
     /**
      * Board dimensions const

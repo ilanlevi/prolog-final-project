@@ -4,7 +4,7 @@ import MainPackage.consts.SettingConst;
 
 public class GameSettings {
 
-    private int level;
+    private Level level;
     private int boardSize;
     private int startingLinesPawns; // how many pawn lines for each player
     private String serverUrl;
@@ -13,11 +13,10 @@ public class GameSettings {
     /**
      * Initialize values with default values
      *
-     * @see SettingConst#DEFAULT_LEVEL
      * @see SettingConst#DEFAULT_DIMENSIONS
      */
     public GameSettings() {
-        level = SettingConst.DEFAULT_LEVEL;
+        level = Level.EASY;
         boardSize = SettingConst.DEFAULT_DIMENSIONS;
         setStartingLinesPawns();
         serverPort = SettingConst.SERVER_PORT;
@@ -28,7 +27,7 @@ public class GameSettings {
     /**
      * @return game level
      */
-    public int getLevel() {
+    public Level getLevel() {
         return level;
     }
 
@@ -37,10 +36,8 @@ public class GameSettings {
      *
      * @param level new valid level
      * @return this
-     * @see SettingConst#MAX_LEVEL
-     * @see SettingConst#MIN_LEVEL
      */
-    public GameSettings setLevel(int level) {
+    public GameSettings setLevel(Level level) {
         if (isLevelValid(level)) {
             this.level = level;
         }
@@ -52,11 +49,10 @@ public class GameSettings {
      *
      * @param level new valid level
      * @return valid or not (boolean)
-     * @see SettingConst#MAX_LEVEL
-     * @see SettingConst#MIN_LEVEL
+
      */
-    public boolean isLevelValid(int level) {
-        return (level <= SettingConst.MAX_LEVEL && level >= SettingConst.MIN_LEVEL);
+    public boolean isLevelValid(Level level) {
+        return (level != null);
     }
 
     /**

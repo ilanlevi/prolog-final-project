@@ -56,7 +56,7 @@ public class SendToServer {
             GameState gameState = null;
 
             if (response.getStatusLine().getStatusCode() != 200) {
-                System.err.println("Cannot find server, exiting!");
+                System.err.println("Cannot find server!");
             } else {
                 responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
                 gameState = GameState.fromJsonArray(currentState, responseString);
