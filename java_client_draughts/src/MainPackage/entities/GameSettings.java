@@ -4,27 +4,30 @@ import MainPackage.consts.SettingConst;
 
 public class GameSettings {
 
-    private int level;
+    private Level level;
     private int boardSize;
     private int startingLinesPawns; // how many pawn lines for each player
+    private String serverUrl;
+    private int serverPort;
 
     /**
      * Initialize values with default values
      *
-     * @see SettingConst#DEFAULT_LEVEL
      * @see SettingConst#DEFAULT_DIMENSIONS
      */
     public GameSettings() {
-        level = SettingConst.DEFAULT_LEVEL;
+        level = Level.EASY;
         boardSize = SettingConst.DEFAULT_DIMENSIONS;
         setStartingLinesPawns();
+        serverPort = SettingConst.SERVER_PORT;
+        serverUrl = SettingConst.SERVER_LOCAL_HOST;
     }
 
 
     /**
      * @return game level
      */
-    public int getLevel() {
+    public Level getLevel() {
         return level;
     }
 
@@ -33,10 +36,8 @@ public class GameSettings {
      *
      * @param level new valid level
      * @return this
-     * @see SettingConst#MAX_LEVEL
-     * @see SettingConst#MIN_LEVEL
      */
-    public GameSettings setLevel(int level) {
+    public GameSettings setLevel(Level level) {
         if (isLevelValid(level)) {
             this.level = level;
         }
@@ -48,11 +49,10 @@ public class GameSettings {
      *
      * @param level new valid level
      * @return valid or not (boolean)
-     * @see SettingConst#MAX_LEVEL
-     * @see SettingConst#MIN_LEVEL
+
      */
-    public boolean isLevelValid(int level) {
-        return (level <= SettingConst.MAX_LEVEL && level >= SettingConst.MIN_LEVEL);
+    public boolean isLevelValid(Level level) {
+        return (level != null);
     }
 
     /**
@@ -75,7 +75,7 @@ public class GameSettings {
         if (isBoardSizeValid(boardSize)) {
             this.boardSize = boardSize;
         }
-        if(!isStartingLinesPawnsValid(startingLinesPawns))
+        if (!isStartingLinesPawnsValid(startingLinesPawns))
             setStartingLinesPawns();
         return this;
     }
@@ -132,12 +132,38 @@ public class GameSettings {
         return startingLinesPawns >= SettingConst.MIN_PAWS_LINES && startingLinesPawns < boardSize / 2;
     }
 
-    @Override
-    public String toString() {
-        return "GameSettings{" +
-                "level=" + level +
-                ", boardSize=" + boardSize +
-                ", startingLinesPawns=" + startingLinesPawns +
-                '}';
+    /**
+     * Check and return if the serverUrl value if valid.
+     *
+     * @param serverUrl server ip as string
+     * @return not null and not empty will return true, or false otherwise
+     */
+    public boolean isServerURLValid(String serverUrl) {
+        return serverUrl != null && !serverUrl.isEmpty();
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public GameSettings setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+        return this;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public GameSettings setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+        return this;
+    }
+
+    /**
+     * @return full server url, form: http://SERVER_IP:SERVER_PORT
+     */
+    public String getServerFullUrl() {
+        return SettingConst.SERVER_PREFIX_FOR_HTTP + serverUrl + SettingConst.SERVER_INFIX_FOR_PORT + serverPort;
     }
 }

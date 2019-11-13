@@ -81,7 +81,6 @@ public class MainFrameController {
 
     public void createNewGame(ActionEvent event) {
         try {
-            // TODO: 18/10/2019 Change string to constst
             showWindow("/MainPackage/gui/fxml/GameGrid.fxml");
             Game.instance().resetGame();
         } catch (Exception e) {

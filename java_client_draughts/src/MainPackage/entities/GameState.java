@@ -1,6 +1,5 @@
 package MainPackage.entities;
 
-import MainPackage.tools.BoardTools;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class GameState {
             for (int j = 0; j < length; j++) {
                 BoardTile boardTileToCopy = toCopy.tiles[i][j];
                 Piece piece = boardTileToCopy.getPiece();
-                tiles[i][j] = new BoardTile(boardTileToCopy.getTileColor(), piece==null?null:piece.clonePiece());
+                tiles[i][j] = new BoardTile(boardTileToCopy.getTileColor(), piece == null ? null : piece.clonePiece());
             }
         }
     }
@@ -65,13 +64,16 @@ public class GameState {
         return true;
     }
 
-    protected void setPiece(int i, int j, Piece piece) {
+    private void setPiece(int i, int j, Piece piece) {
         BoardTile from = getTile(i, j);
         if (from == null)
             return;
         from.setPiece(piece);
     }
 
+    /**
+     * Mark new queens in board if needed
+     */
     public void markNewQueensIfNeeded() {
         int boardSize = Game.instance().getSettings().getBoardSize();
         for (int i = 0; i < boardSize; i++) {
@@ -87,15 +89,17 @@ public class GameState {
         return playerToPlay;
     }
 
-    public GameState changePlayerToPlay() {
+    public void changePlayerToPlay() {
         playerToPlay = Color.other(playerToPlay);
-        return this;
     }
 
-    public boolean isDone() {
-        return BoardTools.isDone(this);
-    }
-
+    /**
+     * Create new game state from json (server response)
+     *
+     * @param last     the last game state
+     * @param newState the new state as a string
+     * @return new GameState
+     */
     public static GameState fromJsonArray(GameState last, String newState) {
         int boardSize = Game.instance().getSettings().getBoardSize();
 
@@ -130,10 +134,13 @@ public class GameState {
 
     }
 
+    /**
+     * @return object as json string
+     */
     @Override
     public String toString() {
         int boardSize = Game.instance().getSettings().getBoardSize();
-        ArrayList<String> pieces = new ArrayList<String>();
+        ArrayList<String> pieces = new ArrayList<>();
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
@@ -147,7 +154,7 @@ public class GameState {
         return "{\"state\": "
                 + pieces.toString() +
                 ",\"settings\":{"
-                + "\"level\": " + Game.instance().getSettings().getLevel() + "," +
+                + "\"level\": " + Game.instance().getSettings().getLevel().toJson() + "," +
                 "\"rows\": " + boardSize +
                 "}" +
                 "}";

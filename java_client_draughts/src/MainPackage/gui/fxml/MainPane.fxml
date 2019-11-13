@@ -10,8 +10,6 @@
       <menus>
         <Menu mnemonicParsing="false" text="Game">
           <items>
-<!--            TODO wtire to do below-->
-            <!--            todo-->
             <MenuItem mnemonicParsing="false" onAction="#handleUndo" text="Undo" />
             <MenuItem mnemonicParsing="false" onAction="#showGame" text="Show game" />
             <MenuItem mnemonicParsing="false" onAction="#createNewGame" text="New game" />
@@ -21,7 +19,6 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Settings">
           <items>
-            <MenuItem mnemonicParsing="false" text="Undo move" />
             <MenuItem mnemonicParsing="false" onAction="#handleSettings" text="Game settings" />
           </items>
         </Menu>
