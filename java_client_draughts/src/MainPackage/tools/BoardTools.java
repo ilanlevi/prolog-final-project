@@ -64,7 +64,7 @@ public class BoardTools {
      * @return true if done, false otherwise
      */
     public static boolean isDone(GameState state) {
-        return isDoneNoPieces(state) || isDoneCannotMove(state);
+        return isDoneNoPieces(state);
     }
 
     /**
@@ -96,49 +96,6 @@ public class BoardTools {
         }
         return true;
     }
-
-    /**
-     * Return if the game is done. (one of the player cannot move any where)
-     *
-     * @param state the game state to check
-     * @return true if done, false otherwise
-     */
-    public static boolean isDoneCannotMove(GameState state) {
-        int blackPawns = 0;
-        int whitePawns = 0;
-        int[][] possibleMoves = {{-2, -2}, {-2, 2}, {2, -2}, {2, 2}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; // all possible moves
-
-        int length = Game.instance().getSettings().getBoardSize();
-        // go over board
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                BoardTile t = state.getTile(i, j);
-
-                if (!t.isEmpty()) { // if the tile has a pawn
-                    Color c = t.getPiece().getColor();
-                    // create all possible moves
-                    for (int[] possibleMove : possibleMoves) {
-                        // try to move
-                        GameState gameState = GameBoardTools.move(state, i, j, i + possibleMove[0], j + possibleMove[1], false);
-                        if (gameState != null) {
-                            // move is valid
-                            if (c == Color.WHITE) {
-                                whitePawns++;
-                            } else {
-                                blackPawns++;
-                            }
-                            if (blackPawns > 0 && whitePawns > 0) { // both player's has at least 1 pawn that can move, stop the loop
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return true;
-
-    }
-
 
 }
 
