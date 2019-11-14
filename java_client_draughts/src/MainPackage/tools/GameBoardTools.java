@@ -21,7 +21,7 @@ public class GameBoardTools {
             return null;
         GameState gameState = new GameState(gameStateOld);
         Piece piece = gameState.getTile(i, j).getPiece();
-        if (!checkPlayer || !isStrikeMove()) {
+        if (!isStrikeMove()) {
             if (Math.abs(i - newI) == 1 && Math.abs(j - newJ) == 1) { // normal move, didn't eat
                 if (!piece.isQueen() && pieceGotBack(piece.getColor(), i, newI)) {
                     // only queen can go back
